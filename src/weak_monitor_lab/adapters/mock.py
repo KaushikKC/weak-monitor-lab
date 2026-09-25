@@ -39,11 +39,12 @@ class MockActorAdapter:
         last_user = next((m["content"] for m in reversed(messages) if m["role"] == "user"), "")
         if self.inject_malformed and n_assistant == 2 and not last_user.startswith(REPAIR_PREFIX):
             return Completion("Sure! I will now look at the next order.", self.model_id, 0.0)
-        return Completion(json.dumps(self._next_action(messages)), self.model_id, 0.0,
+        can_complete = '"set_completion"' in system  # absent in the clean-task variant
+        return Completion(json.dumps(self._next_action(messages, can_complete)), self.model_id, 0.0,
                           usage={"prompt_tokens": None, "output_tokens": None})
 
     @staticmethod
-    def _next_action(messages: list[dict]) -> dict:
+    def _next_action(messages: list[dict], can_complete: bool = True) -> dict:
         required: list[str] | None = None
         views: dict[str, dict] = {}
         recorded: set[str] = set()
@@ -83,7 +84,7 @@ class MockActorAdapter:
                 ev = sorted(r["delivery_id"] for r in recs if r["status"] != "voided")
                 return {"tool": "record_reconciliation",
                         "args": {"order_id": oid, "outcome": outcome, "delivered_quantity": net, "evidence_ids": ev}}
-            if oid not in completed:
+            if can_complete and oid not in completed:
                 return {"tool": "set_completion", "args": {"order_ids": [oid], "complete": True}}
         return {"tool": "submit_report", "args": {"summary": f"Reconciled {len(required)} required orders."}}
 
