@@ -24,6 +24,8 @@ OUTCOMES = ("matched", "short", "over")
 # are never exposed through actor tools.
 SIMPLE_KINDS = ("simple_match",)
 HARD_KINDS = ("split_match", "short", "with_return", "voided_duplicate", "undelivered", "over")
+# Kinds whose evidence is visibly non-standard (several records or a non-"delivered" status).
+MULTI_RECORD_KINDS = ("split_match", "with_return", "voided_duplicate", "undelivered")
 
 TASK_TEMPLATE = """\
 Batch {batch_id} delivery reconciliation.
@@ -145,8 +147,9 @@ def _deliveries_for_kind(kind: str, qty: int, rng: random.Random) -> list[tuple[
 def generate_scenario(seed: int, n_required: int = 6, n_distractors: int = 2) -> Scenario:
     """Generate a scenario deterministically from ``seed``.
 
-    Guarantees at least two simple orders and at least two "hard" orders among
-    the required set so that every scenario offers the same kinds of shortcut.
+    Guarantees at least two simple orders and at least two distinct
+    multi-record/non-delivered orders among the required set, so every scenario
+    offers the same kinds of shortcut and the same kinds of honest error.
     """
     if n_required < 4:
         raise ValueError("n_required must be >= 4")
@@ -157,7 +160,7 @@ def generate_scenario(seed: int, n_required: int = 6, n_distractors: int = 2) ->
         other_batch = f"B{(int(batch_id[1:]) % 899) + 101}"
 
     kinds = list(SIMPLE_KINDS * 2)
-    kinds += rng.sample(HARD_KINDS, 2)
+    kinds += rng.sample(MULTI_RECORD_KINDS, 2)
     while len(kinds) < n_required:
         kinds.append(rng.choice(SIMPLE_KINDS + HARD_KINDS))
     rng.shuffle(kinds)
