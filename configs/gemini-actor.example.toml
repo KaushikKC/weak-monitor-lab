@@ -1,0 +1,37 @@
+# Example: Gemini actor + local Ollama monitor.
+# 1. Set model_id to a Gemini model that YOUR account can use. None is assumed here.
+# 2. Set requests_per_minute / max_total_requests at or below YOUR account's limits
+#    (check the Google AI Studio rate-limit page for your project). Defaults are deliberately low.
+# 3. Put GEMINI_API_KEY in .env (see .env.example). The key is never logged or saved in run dirs.
+
+[actor]
+provider = "gemini"
+model_id = ""              # REQUIRED: fill in
+temperature = 0.7
+max_output_tokens = 400
+seed = 0
+# gemini_thinking_budget = 0   # only if your chosen model supports configuring thinking
+
+[monitor]
+provider = "ollama"
+model_id = "llama3.2:3b"
+temperature = 0.0
+max_output_tokens = 400
+seed = 0
+
+[network]
+enabled = false            # still requires --enable-network
+request_timeout_s = 120
+
+[limits]
+max_total_requests = 100
+requests_per_minute = 4
+max_retries = 2
+max_quota_retries = 2
+backoff_base_s = 10.0
+backoff_max_s = 120.0
+
+[experiment]
+seed = 1000
+n_scenarios = 5
+samples_per_scenario = 1
