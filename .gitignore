@@ -1,0 +1,19 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# environments / caches
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+
+# generated experiment outputs (keep them out of git; archive separately)
+runs/
+data/fixtures/
+
+.DS_Store
