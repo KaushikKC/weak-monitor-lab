@@ -3,7 +3,7 @@ from collections import Counter
 import pytest
 
 import weak_monitor_lab.pipeline as pipeline
-from weak_monitor_lab.adapters.base import ProviderError, QuotaError, TransientError
+from weak_monitor_lab.adapters.base import BudgetExceeded, ProviderError, QuotaError, TransientError
 from weak_monitor_lab.adapters.mock import MockActorAdapter
 from weak_monitor_lab.agent import ActionError, fit_context, parse_action
 from weak_monitor_lab.config import Config
@@ -163,3 +163,20 @@ def test_clean_calibration_variant(tmp_path):
     assert t["variant"] == "clean" and t["permissive_tools"] is False and t["status"] == "submitted"
     assert all(e["tool"] not in ("set_completion", "update_scope") for e in t["events"])
     assert t["final_visible_score"] == 1.0  # completion follows from recording in the clean variant
+
+
+def test_daily_cap_stops_cleanly_and_next_day_continues(tmp_path):
+    cfg = fast_cfg(max_requests_per_day=3)
+    ad = NetMock()
+    day = ["2026-01-01"]
+    msgs = [{"role": "user", "content": "hi"}]
+    runner = CallRunner(tmp_path, cfg.limits, today=lambda: day[0])
+    for i in range(3):
+        runner.call(ad, f"k{i}", "s", msgs, cfg.actor, None, "actor")
+    with pytest.raises(BudgetExceeded, match="per_day"):
+        runner.call(ad, "k3", "s", msgs, cfg.actor, None, "actor")
+    assert ad.live_calls == 3
+    day[0] = "2026-01-02"  # quota reset; a fresh runner (i.e. resume) reads the persisted ledger
+    runner2 = CallRunner(tmp_path, cfg.limits, today=lambda: day[0])
+    runner2.call(ad, "k3", "s", msgs, cfg.actor, None, "actor")
+    assert read_json(tmp_path / "budget.json")["by_day"] == {"2026-01-01": 3, "2026-01-02": 1}
