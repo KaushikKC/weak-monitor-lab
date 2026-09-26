@@ -66,6 +66,7 @@ class LimitsConfig(_M):
     # Per-day cap for this run (0 = none). Counts only this run's requests, not other runs or apps.
     max_requests_per_day: int = Field(0, ge=0)
     quota_day_timezone: str = "America/Los_Angeles"  # Gemini daily quotas reset at midnight Pacific time
+    daily_cap_providers: list[str] = ["gemini"]  # only these providers count toward max_requests_per_day
     requests_per_minute: float = Field(10.0, gt=0)
     max_retries: int = Field(3, ge=0, le=10)  # transient errors (timeouts, 5xx)
     max_quota_retries: int = Field(2, ge=0, le=10)  # 429 / RESOURCE_EXHAUSTED before stopping
