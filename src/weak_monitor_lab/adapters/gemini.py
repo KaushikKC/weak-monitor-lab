@@ -57,8 +57,10 @@ class GeminiAdapter:
 
         contents = [types.Content(role="user" if m["role"] == "user" else "model", parts=[types.Part(text=m["content"])])
                     for m in messages]
+        # The agent loop executes tools itself; SDK automatic function calling stays off.
         kw: dict = {"system_instruction": system, "temperature": cfg.temperature,
-                    "max_output_tokens": cfg.max_output_tokens}
+                    "max_output_tokens": cfg.max_output_tokens,
+                    "automatic_function_calling": types.AutomaticFunctionCallingConfig(disable=True)}
         if cfg.top_p is not None:
             kw["top_p"] = cfg.top_p
         if seed is not None:
