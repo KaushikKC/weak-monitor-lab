@@ -92,14 +92,16 @@ class CallRunner:
                 if self.requests_used >= self.limits.max_total_requests:
                     raise BudgetExceeded(f"max_total_requests={self.limits.max_total_requests} reached")
                 day = self.today()
-                cap = self.limits.max_requests_per_day
+                counts_daily = adapter.provider in self.limits.daily_cap_providers
+                cap = self.limits.max_requests_per_day if counts_daily else 0
                 if cap and self.requests_by_day.get(day, 0) >= cap:
                     raise BudgetExceeded(
                         f"max_requests_per_day={cap} reached for {day} ({self.limits.quota_day_timezone}); "
                         "resume after the daily quota resets")
                 self._throttle()
                 self.requests_used += 1
-                self.requests_by_day[day] = self.requests_by_day.get(day, 0) + 1
+                if counts_daily:
+                    self.requests_by_day[day] = self.requests_by_day.get(day, 0) + 1
                 write_json(self.budget_path, {"network_requests_used": self.requests_used,
                                               "by_day": self.requests_by_day, "updated": utc_now()})
             try:
