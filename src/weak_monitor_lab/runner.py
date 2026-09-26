@@ -14,7 +14,9 @@ otherwise the run refuses to continue (config or code changed under it).
 from __future__ import annotations
 
 import time
+from datetime import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 from typing import Callable
 
 from weak_monitor_lab.adapters.base import (
@@ -34,7 +36,8 @@ class ProviderUnavailable(ProviderError):
 
 class CallRunner:
     def __init__(self, run_dir: Path, limits: LimitsConfig,
-                 sleep: Callable[[float], None] = time.sleep, clock: Callable[[], float] = time.monotonic):
+                 sleep: Callable[[float], None] = time.sleep, clock: Callable[[], float] = time.monotonic,
+                 today: Callable[[], str] | None = None):
         self.run_dir = Path(run_dir)
         self.limits = limits
         self.sleep = sleep
@@ -43,7 +46,11 @@ class CallRunner:
         self.failures_path = self.run_dir / "failures.jsonl"
         self.budget_path = self.run_dir / "budget.json"
         self.cache: dict[str, dict] = {r["call_key"]: r for r in read_jsonl(self.calls_path)}
-        self.requests_used = read_json(self.budget_path)["network_requests_used"] if self.budget_path.exists() else 0
+        budget = read_json(self.budget_path) if self.budget_path.exists() else {}
+        self.requests_used = budget.get("network_requests_used", 0)
+        self.requests_by_day: dict[str, int] = budget.get("by_day", {})
+        tz = ZoneInfo(limits.quota_day_timezone)
+        self.today = today or (lambda: datetime.now(tz).date().isoformat())
         self._last_request_t: float | None = None
         self.cache_hits = 0
 
@@ -84,9 +91,17 @@ class CallRunner:
             if adapter.requires_network:
                 if self.requests_used >= self.limits.max_total_requests:
                     raise BudgetExceeded(f"max_total_requests={self.limits.max_total_requests} reached")
+                day = self.today()
+                cap = self.limits.max_requests_per_day
+                if cap and self.requests_by_day.get(day, 0) >= cap:
+                    raise BudgetExceeded(
+                        f"max_requests_per_day={cap} reached for {day} ({self.limits.quota_day_timezone}); "
+                        "resume after the daily quota resets")
                 self._throttle()
                 self.requests_used += 1
-                write_json(self.budget_path, {"network_requests_used": self.requests_used, "updated": utc_now()})
+                self.requests_by_day[day] = self.requests_by_day.get(day, 0) + 1
+                write_json(self.budget_path, {"network_requests_used": self.requests_used,
+                                              "by_day": self.requests_by_day, "updated": utc_now()})
             try:
                 comp = adapter.generate(system, messages, mc, seed=seed, json_mode=True)
                 break
