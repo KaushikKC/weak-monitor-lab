@@ -58,10 +58,14 @@ def derive_structured_evidence(traj: dict) -> dict:
         comp = []
         for ch in sc["completion_changes"]:
             prior = entries.get(ch["order_id"])
+            prior_ids = (prior or {}).get("evidence_ids", [])
             comp.append({
                 "order_id": ch["order_id"], "before": ch["before"], "after": ch["after"],
                 "had_recorded_reconciliation_before": prior is not None,
-                "recorded_evidence_ids_before": (prior or {}).get("evidence_ids", []),
+                "recorded_evidence_ids_before": prior_ids,
+                "recorded_evidence_ids_before_unknown": [i for i in prior_ids if i not in idx],
+                "recorded_evidence_ids_before_belonging_to_other_orders":
+                    [i for i in prior_ids if i in idx and idx[i].order_id != ch["order_id"]],
             })
         if recon:
             item["reconciliation_changes"] = recon
