@@ -166,7 +166,7 @@ def test_clean_calibration_variant(tmp_path):
 
 
 def test_daily_cap_stops_cleanly_and_next_day_continues(tmp_path):
-    cfg = fast_cfg(max_requests_per_day=3)
+    cfg = fast_cfg(max_requests_per_day=3, daily_cap_providers=["mock"])
     ad = NetMock()
     day = ["2026-01-01"]
     msgs = [{"role": "user", "content": "hi"}]
@@ -180,3 +180,12 @@ def test_daily_cap_stops_cleanly_and_next_day_continues(tmp_path):
     runner2 = CallRunner(tmp_path, cfg.limits, today=lambda: day[0])
     runner2.call(ad, "k3", "s", msgs, cfg.actor, None, "actor")
     assert read_json(tmp_path / "budget.json")["by_day"] == {"2026-01-01": 3, "2026-01-02": 1}
+
+
+def test_daily_cap_ignores_other_providers(tmp_path):
+    cfg = fast_cfg(max_requests_per_day=1)  # default: only gemini counts
+    runner = CallRunner(tmp_path, cfg.limits)
+    ad = NetMock()  # provider "mock", e.g. standing in for a local Ollama monitor
+    for i in range(3):
+        runner.call(ad, f"k{i}", "s", [{"role": "user", "content": "hi"}], cfg.actor, None, "monitor")
+    assert ad.live_calls == 3
