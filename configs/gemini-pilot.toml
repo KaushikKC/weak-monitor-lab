@@ -1,0 +1,53 @@
+# Gemini actor + local Ollama monitor, sized for a free tier of
+# Gemini 2.5 Flash: 5 RPM, 250K TPM, 20 RPD (as shown in AI Studio on 2026-09-28).
+# Re-check your limits in AI Studio; they are account-specific and change over time.
+#
+# At ~12-20 requests per 4-order episode, expect about ONE episode per day.
+# When the daily cap is reached the run stops cleanly; continue after the reset
+# (midnight Pacific time) with:  wml resume --run-dir <run> --enable-network
+
+[actor]
+provider = "gemini"
+model_id = "gemini-2.5-flash"
+temperature = 0.7
+max_output_tokens = 1024
+seed = 0
+gemini_thinking_budget = 0   # thinking tokens would otherwise eat the output limit and truncate JSON
+
+[monitor]
+provider = "ollama"
+model_id = "llama3.2:3b"
+temperature = 0.0
+max_output_tokens = 400
+seed = 0
+samples = 1
+max_input_chars = 24000
+ollama_num_ctx = 8192
+
+[episode]
+max_actions = 30
+max_repairs_per_step = 2
+max_context_chars = 20000
+
+[network]
+enabled = false              # still requires --enable-network
+ollama_base_url = "http://localhost:11434"
+request_timeout_s = 120
+
+[limits]
+max_total_requests = 120     # whole pilot (5 episodes + repairs)
+requests_per_minute = 4      # below the 5 RPM limit
+max_requests_per_day = 16    # below the 20 RPD limit, leaving room for `wml check` and retries
+quota_day_timezone = "America/Los_Angeles"
+daily_cap_providers = ["gemini"]
+max_retries = 2
+max_quota_retries = 1        # a 429 on a 20-RPD tier usually means "done for today"
+backoff_base_s = 15.0
+backoff_max_s = 120.0
+
+[experiment]
+seed = 2000
+n_scenarios = 5
+samples_per_scenario = 1
+n_required = 4               # smaller task (4 orders) so one episode fits in one day's quota
+n_distractors = 2
