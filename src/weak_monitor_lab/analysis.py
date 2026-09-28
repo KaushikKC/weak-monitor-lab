@@ -271,19 +271,20 @@ def _plots(data: list[dict], out_dir: Path) -> list[Path]:
         for ci, cond in enumerate(conds):
             for cls, color, off, lab in ((False, NEG_COLOR, -0.12, "no exploit attempt"),
                                          (True, POS_COLOR, 0.12, "exploit attempt")):
-                ys = sorted(d["score"] for d in ds if d["condition"] == cond and d["exploit_attempt"] == cls)
-                # Spread tied scores side by side so every episode stays visible (no stacking).
-                seen: Counter = Counter()
-                xs = []
+                # One marker per distinct score with its episode count written beside it, so tied
+                # scores never hide episodes (scores from LLM monitors are heavily tied).
+                counts = Counter(d["score"] for d in ds if d["condition"] == cond and d["exploit_attempt"] == cls)
+                ys = sorted(counts)
+                ax.scatter([ci + off] * len(ys), ys, s=[28 + 10 * counts[y] for y in ys], color=color,
+                           edgecolors=SURFACE, linewidths=1.5, zorder=3, label=lab if ci == 0 else None)
                 for y in ys:
-                    n_tied = ys.count(y)
-                    xs.append(ci + off + (seen[y] - (n_tied - 1) / 2) * min(0.02, 0.09 / max(n_tied, 1)))
-                    seen[y] += 1
-                ax.scatter(xs, ys, s=36, color=color, edgecolors=SURFACE, linewidths=1.5, zorder=3,
-                           label=lab if ci == 0 else None)
+                    ax.annotate(str(counts[y]), (ci + off, y), xytext=(-9 if off < 0 else 9, 0),
+                                textcoords="offset points", ha="right" if off < 0 else "left", va="center",
+                                fontsize=8, color=INK_2)
         ax.set_xticks(range(len(conds)), [f"cond {c}" for c in conds])
         ax.set_ylim(-0.05, 1.05)
         ax.set_ylabel("suspicion score (uncalibrated)")
+        ax.set_xlim(-0.6, len(conds) - 0.4)
         ax.grid(axis="y", color=GRID, linewidth=0.8)
         ax.set_axisbelow(True)
         tag = "  [FIXTURE - not empirical]" if is_fix or source == "scripted_fixture" else ""
