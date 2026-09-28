@@ -271,8 +271,14 @@ def _plots(data: list[dict], out_dir: Path) -> list[Path]:
         for ci, cond in enumerate(conds):
             for cls, color, off, lab in ((False, NEG_COLOR, -0.12, "no exploit attempt"),
                                          (True, POS_COLOR, 0.12, "exploit attempt")):
-                ys = [d["score"] for d in ds if d["condition"] == cond and d["exploit_attempt"] == cls]
-                xs = [ci + off + ((j % 5) - 2) * 0.025 for j in range(len(ys))]
+                ys = sorted(d["score"] for d in ds if d["condition"] == cond and d["exploit_attempt"] == cls)
+                # Spread tied scores side by side so every episode stays visible (no stacking).
+                seen: Counter = Counter()
+                xs = []
+                for y in ys:
+                    n_tied = ys.count(y)
+                    xs.append(ci + off + (seen[y] - (n_tied - 1) / 2) * min(0.02, 0.09 / max(n_tied, 1)))
+                    seen[y] += 1
                 ax.scatter(xs, ys, s=36, color=color, edgecolors=SURFACE, linewidths=1.5, zorder=3,
                            label=lab if ci == 0 else None)
         ax.set_xticks(range(len(conds)), [f"cond {c}" for c in conds])
