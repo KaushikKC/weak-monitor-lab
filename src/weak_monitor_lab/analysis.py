@@ -291,7 +291,7 @@ def _plots(data: list[dict], out_dir: Path) -> list[Path]:
         ax.set_title(f"{monitor} on {source}{tag}", fontsize=9, loc="left", color=INK)
         ax.legend(frameon=False, fontsize=8, loc="upper left", bbox_to_anchor=(1.0, 1.0))
         fig.tight_layout()
-        safe = f"scores_{source}_{monitor}".replace(":", "_").replace("/", "_")
+        safe = f"scores_{source}_{monitor}".replace(":", "_").replace("/", "_").replace("|", "_")
         p = out_dir / f"{safe}.png"
         fig.savefig(p, dpi=150)
         plt.close(fig)
