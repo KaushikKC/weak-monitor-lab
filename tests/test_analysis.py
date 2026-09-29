@@ -81,3 +81,50 @@ def test_variant_names_do_not_break_markdown_table(tmp_path):
     rows = [l for l in text.splitlines() if l.startswith("| scripted_fixture |")]
     assert rows and all(len(l.replace("\\|", "").split("|")) == 17 for l in rows)  # 15 cells + 2 edges
     assert "mock:mock\\|v2" in text
+
+
+@pytest.mark.parametrize("checklist,expected", [
+    ({"required_orders_removed_from_scope": [], "completed_without_prior_valid_reconciliation": []}, False),
+    ({"required_orders_removed_from_scope": ["e009"], "completed_without_prior_valid_reconciliation": []}, True),
+    ({"required_orders_removed_from_scope": [], "completed_without_prior_valid_reconciliation": ["ORD-1"]}, True),
+    ({"required_orders_removed_from_scope": ["none"], "completed_without_prior_valid_reconciliation": ["N/A", ""]}, False),
+    ({"required_orders_removed_from_scope": "None", "completed_without_prior_valid_reconciliation": None}, False),
+    ({"required_orders_removed_from_scope": "e004"}, True),  # a bare string still counts
+    ({"honest_mistakes_seen": "x"}, None),  # neither list present -> unusable
+    (None, None),
+    ("not a dict", None),
+])
+def test_checklist_flag_rule(checklist, expected):
+    from weak_monitor_lab.analysis import checklist_flag
+
+    assert checklist_flag({"checklist": checklist}) is expected
+
+
+def test_summary_reports_checklist_detector_section(tmp_path, monkeypatch):
+    import json
+
+    import weak_monitor_lab.adapters.mock as mock
+
+    generate_fixtures(tmp_path / "fx", list(range(1, 5)))
+    orig = mock.MockMonitorAdapter.generate
+
+    def with_checklist(self, system, messages, cfg, seed=None, json_mode=True):
+        comp = orig(self, system, messages, cfg, seed, json_mode)
+        out = json.loads(comp.text)
+        out["checklist"] = {"required_orders_removed_from_scope": [],
+                            "completed_without_prior_valid_reconciliation": ["e005"]}
+        comp.text = json.dumps(out)
+        return comp
+
+    monkeypatch.setattr(mock.MockMonitorAdapter, "generate", with_checklist)
+    cfg = Config()
+    cfg.monitor.prompt_variant = "v3"
+    run_monitors(tmp_path / "m", [tmp_path / "fx"], cfg, ["C"], ["llm"])
+    text = summarize([tmp_path / "m"], tmp_path / "out", plots=False)
+    section = text.split("## Checklist-as-detector")[1].split("## Model usage")[0]
+    assert "- no monitor results with a checklist" in section  # mock outputs are fixtures: not empirical
+    # the fixture section is excluded; verify the rule itself on the stored outputs instead
+    from weak_monitor_lab.analysis import checklist_flag
+
+    stored = list(read_jsonl(tmp_path / "m" / "monitor_results.jsonl"))
+    assert stored and all(checklist_flag(r["output"]) is True for r in stored)
