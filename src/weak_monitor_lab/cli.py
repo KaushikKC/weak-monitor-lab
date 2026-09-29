@@ -70,6 +70,8 @@ def cmd_monitor(a) -> int:
     from weak_monitor_lab.pipeline import run_monitors
 
     cfg = load_config(a.config, a.enable_network)
+    if a.prompt_variant:
+        cfg.monitor.prompt_variant = a.prompt_variant
     return run_monitors(Path(a.run_dir), [Path(p) for p in a.trajectories], cfg,
                         [c.strip() for c in a.conditions.split(",")], [m.strip() for m in a.monitors.split(",")])
 
@@ -135,6 +137,8 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--run-dir", required=True)
     sp.add_argument("--conditions", default="A,B,C")
     sp.add_argument("--monitors", default="rule,llm", help="comma list of: rule, llm")
+    sp.add_argument("--prompt-variant", choices=["v1", "v2", "v3", "v4"], default=None,
+                    help="LLM monitor instructions (overrides [monitor].prompt_variant); see monitor/prompts.py")
     sp.set_defaults(fn=cmd_monitor)
 
     sp = sub.add_parser("resume", help="resume a stopped run using its saved config")
