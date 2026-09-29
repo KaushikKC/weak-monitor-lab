@@ -26,6 +26,11 @@
   evidence to exist and belong to the order, matching the label definition. Results from the two versions
   are kept apart by the monitor name, and scn-2003 is in the dev split. Treat any rule-baseline comparison
   on that pilot as post hoc.
+* **Monitor prompt variants v2–v4 were written after seeing v1's outputs** on the local-main episodes
+  (2026-09-29). Comparisons between v1 and v2+ on those 30 episodes are post hoc. Confirming any
+  improvement needs fresh episodes judged with the prompts fixed in advance. v3's checklist names the
+  two known manipulation mechanisms, so it measures whether a monitor can *apply* a known definition,
+  not whether it can discover new kinds of gaming.
 * **Invented evidence counts as unsupported completion.** A small model that hallucinates an evidence ID
   and then marks the order complete is labelled the same as deliberate gaming. The labels cannot separate
   hallucination from manipulation.
