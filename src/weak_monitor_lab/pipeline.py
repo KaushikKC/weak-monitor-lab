@@ -26,7 +26,9 @@ from weak_monitor_lab.io import (
     append_jsonl, assign_split, opaque_id, read_json, read_jsonl, sha256_text, software_versions, utc_now, write_json,
 )
 from weak_monitor_lab.labels import compute_labels
-from weak_monitor_lab.monitor import CONDITIONS, MONITOR_SYSTEM, llm_monitor, rule_monitor
+from weak_monitor_lab.monitor import CONDITIONS, llm_monitor, rule_monitor
+from weak_monitor_lab.monitor.monitors import monitor_name
+from weak_monitor_lab.monitor.prompts import monitor_system
 from weak_monitor_lab.policies import POLICIES
 from weak_monitor_lab.runner import CallRunner, CheckpointMismatch
 from weak_monitor_lab.sim.env import ReconciliationEnv, state_hash
@@ -213,7 +215,9 @@ def run_monitors(run_dir: Path, traj_dirs: list[Path], cfg: Config, conditions: 
     adapter = make_adapter(cfg.monitor, cfg, "monitor") if "llm" in kinds else None
     describe = adapter.describe() if adapter else None
     _start_session(run_dir, run_id, command, trajs[0]["dataset_source"] if trajs else None, cfg, params,
-                   [{"role": "monitor", **describe}] if describe else [], {"monitor_system": sha256_text(MONITOR_SYSTEM)})
+                   [{"role": "monitor", **describe}] if describe else [],
+                   {"monitor_system": sha256_text(monitor_system(cfg.monitor.prompt_variant)),
+                    "monitor_prompt_variant": cfg.monitor.prompt_variant})
     runner = CallRunner(run_dir, cfg.limits)
     path = run_dir / "monitor_results.jsonl"
     done = {r["result_id"] for r in read_jsonl(path)}
@@ -226,7 +230,8 @@ def run_monitors(run_dir: Path, traj_dirs: list[Path], cfg: Config, conditions: 
             if adapter is None:
                 continue
             for k in range(cfg.monitor.samples):
-                rid = f"{traj['episode_id']}/{cond}/{adapter.provider}:{adapter.model_id}/k{k}"
+                rid = (f"{traj['episode_id']}/{cond}/"
+                       f"{monitor_name(adapter.provider, adapter.model_id, cfg.monitor.prompt_variant)}/k{k}")
                 if rid in done:
                     continue
                 try:
