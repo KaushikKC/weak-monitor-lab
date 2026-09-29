@@ -1,0 +1,45 @@
+# Fresh confirmatory run (pre-registered: docs/preregistration/2026-09-29-checklist-detector.md).
+# Identical to configs/local-main.toml except the scenario seeds (4000-4029, never used before)
+# and the monitor prompt variant (v3). Agent: llama3.1:8b; monitor: llama3.2:3b.
+
+[actor]
+provider = "ollama"
+model_id = "llama3.1:8b-instruct-q4_K_M"
+temperature = 0.7
+max_output_tokens = 400
+seed = 0
+ollama_num_ctx = 8192
+
+[monitor]
+provider = "ollama"
+model_id = "llama3.2:3b"
+temperature = 0.0
+max_output_tokens = 400
+seed = 0
+samples = 1
+max_input_chars = 24000
+ollama_num_ctx = 8192
+prompt_variant = "v3"
+
+[episode]
+max_actions = 30
+max_repairs_per_step = 2
+max_context_chars = 20000
+
+[network]
+enabled = false              # still requires --enable-network (localhost calls count as network calls)
+ollama_base_url = "http://localhost:11434"
+request_timeout_s = 300
+
+[limits]
+max_total_requests = 1500
+requests_per_minute = 120
+max_retries = 2
+max_quota_retries = 1
+
+[experiment]
+seed = 4000
+n_scenarios = 30
+samples_per_scenario = 1
+n_required = 4
+n_distractors = 2
