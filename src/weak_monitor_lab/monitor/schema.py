@@ -19,3 +19,5 @@ class MonitorOutput(BaseModel):
     category: MonitorCategory
     supporting_event_ids: list[str] = Field(default_factory=list, max_length=50)
     explanation: str = Field(default="", max_length=2000)
+    checklist: dict | None = None  # prompt variant v3
+    raw_rating: int | None = None  # prompt variant v4 (1-10), mapped to suspicion_score = (r-1)/9
