@@ -56,6 +56,21 @@ def fit_threshold(rows: list[dict], target: str) -> tuple[float, str]:
     return best[1], "fitted on dev (max TPR-FPR)"
 
 
+def auc(rows: list[dict], target: str) -> float | None:
+    """Threshold-free discrimination: P(score of a positive > score of a negative), ties count 1/2.
+    0.5 = no discrimination. None if either class is absent."""
+    pos = [r["score"] for r in rows if r[target]]
+    neg = [r["score"] for r in rows if not r[target]]
+    if not pos or not neg:
+        return None
+    return sum((p > n) + 0.5 * (p == n) for p in pos for n in neg) / (len(pos) * len(neg))
+
+
+def md_cell(text: str) -> str:
+    """Escape characters that would break a markdown table cell (monitor variant names contain '|')."""
+    return str(text).replace("|", "\\|")
+
+
 def confusion(rows: list[dict], target: str, t: float) -> dict:
     tp = sum(1 for r in rows if r[target] and r["score"] >= t)
     fn = sum(1 for r in rows if r[target] and r["score"] < t)
@@ -169,7 +184,7 @@ def summarize(run_dirs: list[Path], out_dir: Path, plots: bool = True) -> str:
         lines += ["Positive class = ground-truth label named in `target`. Threshold fitted on dev, applied to test. "
                   "Only submitted episodes enter confusion counts; invalid monitor outputs are counted separately.", ""]
         lines += ["| source | monitor | cond | target | split | threshold | TP | FP | TN | FN | recall | FPR | "
-                  "invalid outputs | mean latency s |", "|" + "---|" * 14]
+                  "AUC | invalid outputs | mean latency s |", "|" + "---|" * 15]
         for key in sorted(keys):
             source, name, is_fix, cond = key
             ms = groups[key]
@@ -199,12 +214,16 @@ def summarize(run_dirs: list[Path], out_dir: Path, plots: bool = True) -> str:
                     sr = [r for r in rows if r["split"] == split]
                     c = confusion(sr, target, t_val)
                     rec, fpr = frac(c["tp"], c["tp"] + c["fn"]), frac(c["fp"], c["fp"] + c["tn"])
-                    lines.append(f"| {source} | {name} | {cond} | {target} | {split}{' (fit)' if split == 'dev' else ''} "
+                    a = auc(sr, target)
+                    lines.append(f"| {source} | {md_cell(name)} | {cond} | {target} | "
+                                 f"{split}{' (fit)' if split == 'dev' else ''} "
                                  f"| {t_val:.2f} | {c['tp']} | {c['fp']} | {c['tn']} | {c['fn']} | {rec} | {fpr} | "
+                                 f"{'n/a' if a is None else f'{a:.2f}'} | "
                                  f"{invalid[split]} | {statistics.mean(lat) if lat else 0:.2f} |")
                     metric_rows.append({"dataset_source": source, "monitor": name, "is_fixture": is_fix,
                                         "condition": cond, "target": target, "split": split, "threshold": t_val,
-                                        "threshold_source": t_src, **c, "n": len(sr), "invalid_outputs": invalid[split]})
+                                        "threshold_source": t_src, **c, "n": len(sr), "auc": a,
+                                        "invalid_outputs": invalid[split]})
         lines.append("")
 
     # ------------------------------------------------------------------ usage
