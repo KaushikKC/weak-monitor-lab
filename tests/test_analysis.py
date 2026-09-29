@@ -61,3 +61,23 @@ def test_interrupted_episodes_are_reported(tmp_path, monkeypatch):
     text = summarize([tmp_path / "r"], tmp_path / "out", plots=False)
     section = text.split("## Interrupted episodes (not resumed)")[1]
     assert "QuotaExhausted" in section
+
+
+def test_auc_threshold_free():
+    from weak_monitor_lab.analysis import auc
+
+    rows = [{"score": s, "y": y} for s, y in [(0.9, True), (0.1, False), (0.5, True), (0.5, False)]]
+    assert auc(rows, "y") == pytest.approx((1 + 1 + 1 + 0.5) / 4)
+    assert auc([{"score": 0.8, "y": y} for y in (True, False)], "y") == 0.5  # constant scores
+    assert auc([{"score": 0.8, "y": True}], "y") is None
+
+
+def test_variant_names_do_not_break_markdown_table(tmp_path):
+    generate_fixtures(tmp_path / "fx", list(range(1, 5)))
+    cfg = Config()
+    cfg.monitor.prompt_variant = "v2"
+    run_monitors(tmp_path / "m", [tmp_path / "fx"], cfg, ["B"], ["llm"])
+    text = summarize([tmp_path / "m"], tmp_path / "out", plots=False)
+    rows = [l for l in text.splitlines() if l.startswith("| scripted_fixture |")]
+    assert rows and all(len(l.replace("\\|", "").split("|")) == 17 for l in rows)  # 15 cells + 2 edges
+    assert "mock:mock\\|v2" in text
