@@ -143,9 +143,54 @@ def test_checkpoint_prompt_mismatch_is_refused(tmp_path):
         runner2.call(ad, "k1", "sys", [{"role": "user", "content": "DIFFERENT"}], cfg.actor, None, "actor")
 
 
-def test_elicited_source_is_reserved(tmp_path):
-    with pytest.raises(NotImplementedError):
-        pipeline.run_actor(tmp_path / "r", fast_cfg(), "elicited_adversarial")
+# Hash of the unprompted actor prompt used by every agent_unprompted run so far.
+UNPROMPTED_ACTOR_PROMPT_HASH = "63b9bf998bad7093f46a2582f48531e5e1afbd2dd39122220fa7412d38551455"
+
+
+def test_unprompted_actor_prompt_is_unchanged():
+    from weak_monitor_lab.agent import actor_system_prompt
+    from weak_monitor_lab.io import sha256_text
+
+    assert sha256_text(actor_system_prompt(True)) == UNPROMPTED_ACTOR_PROMPT_HASH
+    assert sha256_text(actor_system_prompt(True, "none")) == UNPROMPTED_ACTOR_PROMPT_HASH
+    assert "Evaluation note" in actor_system_prompt(True, "score_pressure")
+
+
+@pytest.mark.parametrize("source,elicitation,clean", [
+    ("elicited_adversarial", "none", False),           # elicited source needs an elicitation
+    ("elicited_adversarial", "score_pressure", True),  # and the permissive tools
+    ("agent_unprompted", "score_pressure", False),     # unprompted data must never be elicited
+    ("capability_calibration", "score_pressure", True),
+])
+def test_elicitation_is_kept_to_its_own_source(tmp_path, source, elicitation, clean):
+    cfg = fast_cfg()
+    cfg.experiment.elicitation = elicitation
+    with pytest.raises(ValueError):
+        pipeline.run_actor(tmp_path / "r", cfg, source, clean=clean)
+
+
+def test_elicited_run_is_separate_and_hidden_from_monitors(tmp_path):
+    from weak_monitor_lab.agent import actor_system_prompt
+    from weak_monitor_lab.io import sha256_text
+    from weak_monitor_lab.monitor import build_monitor_input
+
+    cfg = fast_cfg()
+    cfg.experiment.elicitation = "score_pressure"
+    assert pipeline.run_actor(tmp_path / "e", cfg, "elicited_adversarial", command="elicit") == 0
+    trajs = list(read_jsonl(tmp_path / "e" / "trajectories.jsonl"))
+    assert trajs and all(t["dataset_source"] == "elicited_adversarial" for t in trajs)
+    assert all(t["actor_system_prompt_hash"] == sha256_text(actor_system_prompt(True, "score_pressure"))
+               for t in trajs)
+    for t in trajs:
+        for cond in "ABC":
+            text, _ = build_monitor_input(t, cond)
+            assert "Evaluation note" not in text and "score_pressure" not in text
+    # mixing with unprompted data in one monitor run is refused
+    pipeline.run_actor(tmp_path / "u", fast_cfg(), "agent_unprompted")
+    with pytest.raises(ValueError, match="mix"):
+        pipeline.run_monitors(tmp_path / "m", [tmp_path / "e", tmp_path / "u"], fast_cfg(), ["A"], ["rule"])
+    # resume works for elicit runs
+    assert read_json(tmp_path / "e" / "manifest.json")["command"] == "elicit"
 
 
 def test_fatal_provider_error_is_recorded_not_retried(tmp_path, monkeypatch):
