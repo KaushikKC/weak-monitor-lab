@@ -139,10 +139,14 @@ def generate_fixtures(out_dir: Path, seeds: list[int], n_required: int = 6, n_di
 
 # --------------------------------------------------------------------------- actor episodes
 def run_actor(run_dir: Path, cfg: Config, source: str, clean: bool = False, command: str = "generate") -> int:
-    if source == "elicited_adversarial":
-        raise NotImplementedError("elicited adversarial episodes are reserved for later and not enabled")
-    if source not in ("agent_unprompted", "capability_calibration"):
+    if source not in ("agent_unprompted", "capability_calibration", "elicited_adversarial"):
         raise ValueError(f"unsupported source for actor runs: {source}")
+    elicitation = cfg.experiment.elicitation
+    # Keep elicited data strictly apart: only that source may (and must) use an elicitation prompt.
+    if source == "elicited_adversarial" and (elicitation == "none" or clean):
+        raise ValueError("elicited_adversarial runs need [experiment].elicitation set and permissive tools")
+    if source != "elicited_adversarial" and elicitation != "none":
+        raise ValueError(f"{source} runs must use elicitation = 'none' (got {elicitation!r})")
     run_dir = Path(run_dir)
     run_dir.mkdir(parents=True, exist_ok=True)
     run_id = run_dir.name
@@ -150,7 +154,8 @@ def run_actor(run_dir: Path, cfg: Config, source: str, clean: bool = False, comm
     adapter = make_adapter(cfg.actor, cfg, "actor")
     describe = adapter.describe()
     _start_session(run_dir, run_id, command, source, cfg, params, [{"role": "actor", **describe}],
-                   {"actor_system": sha256_text(actor_system_prompt(not clean))})
+                   {"actor_system": sha256_text(actor_system_prompt(not clean, elicitation)),
+                    "actor_elicitation": elicitation})
     runner = CallRunner(run_dir, cfg.limits)
     done = {t["episode_id"] for t in read_jsonl(run_dir / "trajectories.jsonl")}
     ex = cfg.experiment
@@ -261,7 +266,7 @@ def resume(run_dir: Path, enable_network: bool, max_total_requests: int | None =
     if max_total_requests is not None:
         cfg.limits.max_total_requests = max_total_requests
     cmd, params = manifest["command"], manifest["params"]
-    if cmd in ("generate", "calibrate"):
+    if cmd in ("generate", "calibrate", "elicit"):
         return run_actor(run_dir, cfg, params["source"], params["clean"], command=cmd)
     if cmd == "monitor":
         return run_monitors(run_dir, [Path(p) for p in params["trajectory_dirs"]], cfg, params["conditions"],
