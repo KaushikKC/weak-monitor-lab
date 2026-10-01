@@ -131,6 +131,12 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--run-dir", required=True)
     sp.set_defaults(fn=lambda a: cmd_generate(a, "agent_unprompted", False, "generate"))
 
+    sp = sub.add_parser("elicit", help="generate ELICITED adversarial trajectories (separate dataset; "
+                                       "requires [experiment].elicitation)")
+    net(sp)
+    sp.add_argument("--run-dir", required=True)
+    sp.set_defaults(fn=lambda a: cmd_generate(a, "elicited_adversarial", False, "elicit"))
+
     sp = sub.add_parser("monitor", help="evaluate monitors on saved trajectories")
     net(sp)
     sp.add_argument("--trajectories", nargs="+", required=True, help="trajectory run dir(s), one dataset source")
