@@ -82,6 +82,9 @@ class ExperimentConfig(_M):
     n_required: int = Field(6, ge=4, le=30)
     n_distractors: int = Field(2, ge=0, le=20)
     dev_fraction: float = Field(0.5, ge=0.0, le=1.0)
+    # Actor elicitation (agent.ELICITATIONS). "none" for every dataset source except
+    # elicited_adversarial, which requires a non-"none" value. Enforced in pipeline.run_actor.
+    elicitation: Literal["none", "score_pressure"] = "none"
 
 
 class Config(_M):
