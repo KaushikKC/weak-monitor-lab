@@ -82,6 +82,15 @@ def cmd_resume(a) -> int:
     return resume(Path(a.run_dir), a.enable_network, a.max_total_requests)
 
 
+def cmd_gap(a) -> int:
+    from weak_monitor_lab.gap import write_gap_file
+
+    for d in a.run_dirs:
+        path, status = write_gap_file(Path(d))
+        print(f"{path}: {status}")
+    return 0
+
+
 def cmd_summarize(a) -> int:
     from weak_monitor_lab.analysis import summarize
 
@@ -152,6 +161,10 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--enable-network", action="store_true")
     sp.add_argument("--max-total-requests", type=int, default=None, help="raise the run's request cap")
     sp.set_defaults(fn=cmd_resume)
+
+    sp = sub.add_parser("gap", help="write gap.jsonl (true progress T, proxy gap G) for trajectory run dirs")
+    sp.add_argument("run_dirs", nargs="+")
+    sp.set_defaults(fn=cmd_gap)
 
     sp = sub.add_parser("summarize", help="results table, CSVs and plots")
     sp.add_argument("run_dirs", nargs="+")
