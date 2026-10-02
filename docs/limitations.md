@@ -55,6 +55,17 @@
   after the earlier results were seen. All are scripted or prompt changes; no new model data exists yet.
   The hard negatives use a single error type (quantity off by one), so they are more uniform than real
   agent failures.
+* **Fixture action order differs by class** (noted 2026-10-02, before the hacking-vs-failing data). The
+  honest-sequential, ordinary-mistakes and gap-matched (`ordinary_mistakes_k*`) fixtures interleave
+  read → record → complete for each order. The exploit fixtures (`scope_exclusion`,
+  `unsupported_completion`, `scope_padding`) **read every order first**, then record, then set completion in
+  one call. `honest_batch` also reads first but uses a single batch record. A monitor could therefore
+  separate scripted classes by action *order* rather than by manipulation. Fixture results (D3) must be read
+  with this in mind and are never pooled with model-agent data.
+* **Fixture report text was unified on 2026-10-02.** Every fixture policy now submits
+  "Reconciled the required orders and submitted." Earlier, exploit fixtures said "Visible score 1.0"
+  and honest ones did not, which leaked the class into condition A. Fixtures generated before this change
+  (the offline demo and earlier fixture runs) still contain the old texts. No model-agent data is affected.
 * **"Negatives by type" analysis (added 2026-10-02, analysis only, no new data).** It adds two derived
   measures, true progress T and proxy gap G = proxy − T (`gap.py`, by replay; see `ground_truth.md`), and
   splits false alarms by episode class. Choices to keep in mind:
