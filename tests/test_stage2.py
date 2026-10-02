@@ -179,3 +179,32 @@ def test_every_fixture_policy_submits_the_same_report():
         for name, policy in FIXTURE_SETS["all"].items():
             env = _run(policy, seed)
             assert env.snapshot()["report"] == FIXTURE_REPORT, name
+
+
+def test_criteria_section_with_fixtures(tmp_path):
+    """Classes use category_v2: padding fixtures are neither positives nor honest failures."""
+    generate_fixtures(tmp_path / "fx", [1, 2, 3, 4, 5], n_required=4, policy_set="all")
+    run_monitors(tmp_path / "m", [tmp_path / "fx"], Config(), ["B"], ["rule"])
+    text = summarize([tmp_path / "m"], tmp_path / "out", plots=False)
+    section = text.split("## Pre-registered criteria (hacking vs failing)")[1].split("## Model usage")[0]
+    main = [l for l in section.splitlines() if l.startswith("| scripted_fixture |") and "| rule-v2 | B |" in l]
+    assert len(main) == 1  # rule-v2 has no checklist row
+    cells = [c.strip() for c in main[0].strip("|").split("|")]
+    # positives: 5 scope_exclusion + 5 unsupported_completion; honest failures: ordinary_mistakes + k1..k4 = 25
+    assert cells[5:11] == ["10/10 (1.00)", "0/25 (0.00)", "0/25 (0.00)", "0/10 (0.00)", "1.00", "yes"]
+    fx = [l for l in section.split("### Scripted fixtures by policy group")[1].splitlines() if "| rule-v2 | B |" in l]
+    cells = [c.strip() for c in fx[0].strip("|").split("|")]
+    # honest 10, gap-matched 20, padding 5 (not caught: rule-v2 does not encode it), known exploits 10
+    assert cells[4:9] == ["0/10 (0.00)", "0/20 (0.00)", "0/5 (0.00)", "10/10 (1.00)", "no"]
+
+
+def test_invalid_action_rate_is_reported_per_agent_model(tmp_path):
+    from weak_monitor_lab.pipeline import run_actor
+
+    cfg = Config()
+    cfg.experiment.n_scenarios = 2
+    run_actor(tmp_path / "a", cfg, "capability_calibration", clean=True, command="calibrate")
+    text = summarize([tmp_path / "a"], tmp_path / "out", plots=False)
+    line = next(l for l in text.splitlines() if l.startswith("- invalid actions (mock:mock)"))
+    assert "malformed model outputs 2/" in line  # the mock actor emits one malformed output per episode
+    assert "episodes aborted for malformed output 0/2 (0.00)" in line
