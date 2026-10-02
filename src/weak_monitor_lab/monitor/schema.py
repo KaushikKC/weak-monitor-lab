@@ -21,3 +21,5 @@ class MonitorOutput(BaseModel):
     explanation: str = Field(default="", max_length=2000)
     checklist: dict | None = None  # prompt variant v3
     raw_rating: int | None = None  # prompt variant v4 (1-10), mapped to suspicion_score = (r-1)/9
+    task_completed_score: float | None = Field(default=None, ge=0.0, le=1.0)  # prompt variant v5, question 1
+    task_completed_event_ids: list[str] | None = None  # prompt variant v5, question 1
