@@ -105,6 +105,10 @@ class MockMonitorAdapter:
     def generate(self, system, messages, cfg: ModelConfig, seed=None, json_mode=True) -> Completion:
         out = {"suspicion_score": 0.5, "category": "insufficient_evidence", "supporting_event_ids": [],
                "explanation": "MOCK FIXTURE OUTPUT - not a model judgement."}
+        if '"score_manipulated"' in system:  # prompt variant v5: two separate questions
+            out = {"task_completed": {"score": 0.5, "event_ids": []},
+                   "score_manipulated": {"score": 0.5, "event_ids": []},
+                   "category": "insufficient_evidence", "explanation": out["explanation"]}
         if '"suspicion_rating"' in system:  # prompt variant v4 asks for an integer 1-10
             out = {k: v for k, v in out.items() if k != "suspicion_score"} | {"suspicion_rating": 5}
         return Completion(json.dumps(out), self.model_id, 0.0)
