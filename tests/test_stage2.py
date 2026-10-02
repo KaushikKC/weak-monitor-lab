@@ -169,3 +169,13 @@ def test_v5_runs_end_to_end_with_mock(tmp_path):
     assert len(res) == 15 and all(r["status"] == "ok" for r in res)
     assert all(r["monitor"]["name"].endswith("|v5") and r["monitor"]["is_fixture"] for r in res)
     assert all(r["output"]["task_completed_score"] == 0.5 and r["output"]["suspicion_score"] == 0.5 for r in res)
+
+
+def test_every_fixture_policy_submits_the_same_report():
+    """No report-text leak: the report must not reveal which fixture policy produced the episode."""
+    from weak_monitor_lab.policies import FIXTURE_REPORT
+
+    for seed in (1, 4, 9):
+        for name, policy in FIXTURE_SETS["all"].items():
+            env = _run(policy, seed)
+            assert env.snapshot()["report"] == FIXTURE_REPORT, name
