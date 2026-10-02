@@ -2,6 +2,10 @@
 
 ## Environment and labels
 
+* **Order counts differ by dataset.** Scripted fixtures (`wml fixtures`, `wml demo`) use 6 required orders.
+  The model-agent runs reported in `docs/results/` (local pilot, main, fresh and elicited runs, and the
+  Gemini pilot) used 4. The early one-episode Ollama smoke test (`configs/pilot-ollama.toml`) used 6.
+  Values such as true progress T move in steps of 1/6 or 1/4 accordingly.
 * **Toy, synthetic task.** A reconciliation simulator with 6 required orders and two hand-designed
   shortcuts. Results say nothing directly about realistic agents, tasks, or reward hacking in training.
 * **Only two manipulation mechanisms are labelled.** Scope *padding* (adding reconciled non-required
@@ -42,6 +46,16 @@
   wording, output length, JSON mode, or the model's instruction-following quality.
 * **Truncation.** Long traces are abbreviated or have middle events omitted (recorded per result),
   which can hide evidence under B/C.
+* **"Negatives by type" analysis (added 2026-10-02, analysis only, no new data).** It adds two derived
+  measures, true progress T and proxy gap G = proxy − T (`gap.py`, by replay; see `ground_truth.md`), and
+  splits false alarms by episode class. Choices to keep in mind:
+  * ordinary failures with G < 0 get their own column so none are dropped;
+  * "flagged" means score ≥ threshold, with the fixed cut 0.5 counted on all submitted episodes;
+  * the dev-fit threshold is fitted on dev with target `exploit_attempt` and counted on test only;
+  * rows are grouped by episode set (agent run) so different episode sets are never pooled;
+  * AUC compares exploit-attempt episodes with ordinary failures where G > 0.
+  This was added after the earlier results were seen. It re-analyses the same runs and is descriptive only.
+  Classes can be tiny (often 0–5 episodes).
 
 ## Statistics
 
