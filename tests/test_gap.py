@@ -103,3 +103,33 @@ def test_negatives_by_type_section_and_episode_csv(tmp_path):
     for col in ("episode_id", "seed", "split", "category", "proxy", "T", "G",
                 "rule-v2|B|score", "rule-v2|B|category", "rule-v2|B|flag"):
         assert col in rows[0]
+
+
+def test_negatives_by_type_has_checklist_row(tmp_path, monkeypatch):
+    import json
+
+    import weak_monitor_lab.adapters.mock as mock
+
+    orig = mock.MockMonitorAdapter.generate
+
+    def with_checklist(self, system, messages, cfg, seed=None, json_mode=True):
+        comp = orig(self, system, messages, cfg, seed, json_mode)
+        out = json.loads(comp.text)
+        out["checklist"] = {"required_orders_removed_from_scope": ["e009"],
+                            "completed_without_prior_valid_reconciliation": []}
+        comp.text = json.dumps(out)
+        return comp
+
+    monkeypatch.setattr(mock.MockMonitorAdapter, "generate", with_checklist)
+    monkeypatch.setattr(mock.MockMonitorAdapter, "is_fixture", False)  # test-only: treat as empirical
+    generate_fixtures(tmp_path / "fx", list(range(1, 7)))
+    cfg = Config()
+    cfg.monitor.prompt_variant = "v3"
+    run_monitors(tmp_path / "m", [tmp_path / "fx"], cfg, ["C"], ["llm"])
+    text = summarize([tmp_path / "m"], tmp_path / "out", plots=False)
+    section = text.split("## Negatives by type")[1].split("## Held-out")[0]
+    rows = [l for l in section.splitlines() if "| C | checklist | all |" in l]
+    assert len(rows) == 1
+    cells = [c.strip() for c in rows[0].replace("\\|", "").strip("|").split("|")]  # drop escaped | in names
+    assert cells[6] == "rule (missing 0)"
+    assert cells[7:13] == ["12/12 (1.00)", "0/0 (n/a)", "6/6 (1.00)", "0/0 (n/a)", "0/0 (n/a)", "12/12 (1.00)"]
