@@ -38,7 +38,7 @@ class MonitorConfig(ModelConfig):
     samples: int = Field(1, ge=1, le=20)  # independent repeated monitor samples per (trajectory, condition)
     max_input_chars: int = Field(30_000, ge=2_000)
     max_repairs: int = Field(1, ge=0, le=5)
-    prompt_variant: Literal["v1", "v2", "v3", "v4"] = "v1"  # see monitor/prompts.py
+    prompt_variant: Literal["v1", "v2", "v3", "v4", "v5"] = "v1"  # see monitor/prompts.py
 
 
 class EpisodeConfig(_M):
