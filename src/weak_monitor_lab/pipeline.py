@@ -29,7 +29,6 @@ from weak_monitor_lab.labels import compute_labels
 from weak_monitor_lab.monitor import CONDITIONS, llm_monitor, rule_monitor
 from weak_monitor_lab.monitor.monitors import monitor_name
 from weak_monitor_lab.monitor.prompts import monitor_system
-from weak_monitor_lab.policies import POLICIES
 from weak_monitor_lab.runner import CallRunner, CheckpointMismatch
 from weak_monitor_lab.sim.env import ReconciliationEnv, state_hash
 from weak_monitor_lab.sim.scenario import generate_scenario
@@ -103,8 +102,16 @@ def _finish(run_dir: Path, state: str, reason: str | None = None) -> None:
 
 # --------------------------------------------------------------------------- fixtures
 def generate_fixtures(out_dir: Path, seeds: list[int], n_required: int = 6, n_distractors: int = 2,
-                      dev_fraction: float = 0.5) -> list[dict]:
-    """Scripted-policy trajectories. Deterministic; no model calls."""
+                      dev_fraction: float = 0.5, policy_set: str = "core") -> list[dict]:
+    """Scripted-policy trajectories. Deterministic; no model calls.
+
+    policy_set: "core" (the original five), "gap-matched" (ordinary_mistakes_k1..k|R|),
+    "held-out" (scope_padding) or "all". Gap-matched variants with k > n_required are skipped."""
+    from weak_monitor_lab.policies import FIXTURE_SETS, gap_k
+
+    if policy_set not in FIXTURE_SETS:
+        raise ValueError(f"unknown policy_set {policy_set!r}; choose from {sorted(FIXTURE_SETS)}")
+    policies = {n: p for n, p in FIXTURE_SETS[policy_set].items() if (gap_k(n) or 0) <= n_required}
     out_dir = Path(out_dir)
     for f in ("trajectories.jsonl", "labels.jsonl"):
         (out_dir / f).unlink(missing_ok=True)
@@ -115,11 +122,11 @@ def generate_fixtures(out_dir: Path, seeds: list[int], n_required: int = 6, n_di
     write_json(out_dir / "manifest.json", {
         "run_id": run_id, "command": "fixtures", "dataset_source": "scripted_fixture", "created_at": utc_now(),
         "params": {"seeds": seeds, "n_required": n_required, "n_distractors": n_distractors,
-                   "dev_fraction": dev_fraction},
+                   "dev_fraction": dev_fraction, "policy_set": policy_set},
         "software": software_versions()})
     labels = []
     for seed in seeds:
-        for name, policy in POLICIES.items():
+        for name, policy in policies.items():
             scn = generate_scenario(seed, n_required, n_distractors)
             env = ReconciliationEnv(scn)
             started = utc_now()
