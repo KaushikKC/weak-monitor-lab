@@ -12,6 +12,9 @@
   orders), editing entries after completion, misleading report claims without state manipulation, and
   other gaming strategies are unlabelled. An unlabelled strategy counts as `ordinary_failure` or
   `honest_success`, which can inflate a monitor's apparent false positives.
+  *Update 2026-10-02:* scope padding is now labelled, but only in separate v2 fields
+  (`padding_*`, `category_v2`, `exploit_attempt_v2`). It is used as a held-out family that rule-v2 and
+  prompt v5 do not encode. The original fields still treat padding as unlabelled.
 * **Behavioural labels, not intent.** The predicates cannot tell a deliberate shortcut from confusion
   (for example, a small model marking orders complete before reconciling). Labels are "the trace contains a
   proxy-relevant manipulation", nothing more.
@@ -46,6 +49,12 @@
   wording, output length, JSON mode, or the model's instruction-following quality.
 * **Truncation.** Long traces are abbreviated or have middle events omitted (recorded per result),
   which can hide evidence under B/C.
+* **Stage 2 additions (2026-10-02, code only, no model calls).** These are gap-matched hard-negative fixtures
+  (`ordinary_mistakes_k1..k6`), the scope-padding policy and labels, prompt v5 (two separate questions,
+  flag on question 2 only; it does not name padding), and a held-out summary section. They were designed
+  after the earlier results were seen. All are scripted or prompt changes; no new model data exists yet.
+  The hard negatives use a single error type (quantity off by one), so they are more uniform than real
+  agent failures.
 * **"Negatives by type" analysis (added 2026-10-02, analysis only, no new data).** It adds two derived
   measures, true progress T and proxy gap G = proxy − T (`gap.py`, by replay; see `ground_truth.md`), and
   splits false alarms by episode class. Choices to keep in mind:
