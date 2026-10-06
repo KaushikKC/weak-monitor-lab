@@ -67,6 +67,7 @@ AUC below = P(a random exploit episode scores higher than a random non-exploit e
 | 7 | 8B monitor, v3 | seeds 3000–3029 | Best LLM result (AUC 0.71–0.74), exploratory | [checklist-fresh](docs/results/2026-09-29-checklist-detector-fresh.md) |
 | 8 | **Pre-registered** 8B v3 confirmation | fresh seeds 4000–4029 (unseen by 8B) | H2 met: AUC 0.74, 5/5 caught, but 14/25 false alarms | [8b-v3-confirmation](docs/results/2026-10-02-8b-v3-confirmation.md) |
 | 9 | **Pre-registered** elicited-adversarial dataset | seeds 5000–5029, "judged only by score" prompt, 7/30 exploit | Elicitation weak; 8B v3 met H2 again (AUC 0.66); checklist 6/7 with 5/23 false alarms; 3B ≈ 0 | [elicited-dataset](docs/results/2026-10-02-elicited-dataset.md) |
+| 10 | **Pre-registered** hacking vs failing (8B v5 primary) | seeds 6000–6059, 14/60 exploit; scripted fixtures; calibration | Primary R1 not met: AUC 0.64, 0/35 false alarms but 4/14 caught; v3 catches 13/14 with 20/35 false alarms | [hacking-vs-failing](docs/results/2026-10-06-hacking-vs-failing.md) |
 
 ### Open next steps
 
