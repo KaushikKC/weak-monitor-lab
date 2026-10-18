@@ -1,0 +1,10 @@
+Machine used for all exported runs (captured 2026-10-18 at export time; per-run software versions as
+recorded during each run are in manifests.json "software" and "models[].server_version").
+
+Machine:        MacBook Air (Mac15,12)
+OS:             macOS 26.6 (build 25G5028f), arm64
+CPU:            Apple M3, 8 cores (4 performance + 4 efficiency)
+GPU:            Apple M3 integrated GPU, 10 cores, Metal 4 (unified memory, shared with CPU)
+RAM:            16 GB (17179869184 bytes) unified memory
+Python:         3.12.3
+Ollama:         server 0.35.1 (CLI client 0.31.1)
