@@ -1,0 +1,3132 @@
+[
+ {
+  "run_id": "elicited-actor",
+  "manifest_run_id": "elicited-actor",
+  "command": "elicit",
+  "dataset_source": "elicited_adversarial",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "a2173152763011dc2b8b35e7f42ffa14334e6220",
+  "timestamps": {
+   "created_at": "2026-10-02T07:33:27.792+00:00",
+   "session_starts": [
+    "2026-10-02T07:33:27.792+00:00"
+   ],
+   "status_updated_at": "2026-10-02T08:19:38.056+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "clean": false,
+   "source": "elicited_adversarial"
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "elicitation": "score_pressure",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 30,
+    "samples_per_scenario": 1,
+    "seed": 5000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 1500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v1",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "actor",
+    "provider": "ollama",
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+    "quantization": "Q4_K_M",
+    "parameter_size": "8.0B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 4920753328,
+    "server_version": "0.34.0"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "actor_elicitation": "score_pressure",
+    "actor_system": "a71ba59000fb82607873f5dca257855f23e9fed4206d6c61106ca49d2d1aac71"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": true,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "elicited-monitor-3b-v3",
+  "manifest_run_id": "elicited-monitor-3b-v3",
+  "command": "monitor",
+  "dataset_source": "elicited_adversarial",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "a2173152763011dc2b8b35e7f42ffa14334e6220",
+  "timestamps": {
+   "created_at": "2026-10-02T10:45:23.400+00:00",
+   "session_starts": [
+    "2026-10-02T10:45:23.400+00:00"
+   ],
+   "status_updated_at": "2026-10-02T11:09:44.002+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "conditions": [
+    "A",
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "rule",
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/elicited-actor"
+   ]
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 30,
+    "samples_per_scenario": 1,
+    "seed": 4000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 1500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v3",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "monitor",
+    "provider": "ollama",
+    "model_id": "llama3.2:3b",
+    "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+    "quantization": "Q4_K_M",
+    "parameter_size": "3.2B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 2019393189,
+    "server_version": "0.34.0"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "monitor_prompt_variant": "v3",
+    "monitor_system": "b5893ef525a56bb24ec30c3496f379cc3d3b331337139d66ced246fd2a89b950"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "elicited-monitor-8b-v3",
+  "manifest_run_id": "elicited-monitor-8b-v3",
+  "command": "monitor",
+  "dataset_source": "elicited_adversarial",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "a2173152763011dc2b8b35e7f42ffa14334e6220",
+  "timestamps": {
+   "created_at": "2026-10-02T08:19:38.473+00:00",
+   "session_starts": [
+    "2026-10-02T08:19:38.473+00:00",
+    "2026-10-02T10:23:20.446+00:00"
+   ],
+   "status_updated_at": "2026-10-02T10:45:22.271+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "conditions": [
+    "A",
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/elicited-actor"
+   ]
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 30,
+    "samples_per_scenario": 1,
+    "seed": 3000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 1500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v3",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "monitor",
+    "provider": "ollama",
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+    "quantization": "Q4_K_M",
+    "parameter_size": "8.0B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 4920753328,
+    "server_version": "0.34.0"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "monitor_prompt_variant": "v3",
+    "monitor_system": "b5893ef525a56bb24ec30c3496f379cc3d3b331337139d66ced246fd2a89b950"
+   },
+   {
+    "monitor_prompt_variant": "v3",
+    "monitor_system": "b5893ef525a56bb24ec30c3496f379cc3d3b331337139d66ced246fd2a89b950"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   },
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 2,
+  "resumed": true,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "fresh-actor",
+  "manifest_run_id": "fresh-actor",
+  "command": "generate",
+  "dataset_source": "agent_unprompted",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "df32dfb75f7570cad7a427e685fc29aa64d82325",
+  "timestamps": {
+   "created_at": "2026-09-29T08:24:53.003+00:00",
+   "session_starts": [
+    "2026-09-29T08:24:53.003+00:00"
+   ],
+   "status_updated_at": "2026-09-29T09:00:10.540+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "clean": false,
+   "source": "agent_unprompted"
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 30,
+    "samples_per_scenario": 1,
+    "seed": 4000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 1500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v3",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "actor",
+    "provider": "ollama",
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+    "quantization": "Q4_K_M",
+    "parameter_size": "8.0B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 4920753328,
+    "server_version": "0.34.0"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "actor_system": "63b9bf998bad7093f46a2582f48531e5e1afbd2dd39122220fa7412d38551455"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": true,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "fresh-monitor-3b-v3",
+  "manifest_run_id": "fresh-monitor-3b-v3",
+  "command": "monitor",
+  "dataset_source": "agent_unprompted",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "df32dfb75f7570cad7a427e685fc29aa64d82325",
+  "timestamps": {
+   "created_at": "2026-09-29T09:00:10.919+00:00",
+   "session_starts": [
+    "2026-09-29T09:00:10.920+00:00"
+   ],
+   "status_updated_at": "2026-09-29T10:34:26.477+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "conditions": [
+    "A",
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "rule",
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/fresh-actor"
+   ]
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 30,
+    "samples_per_scenario": 1,
+    "seed": 4000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 1500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v3",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "monitor",
+    "provider": "ollama",
+    "model_id": "llama3.2:3b",
+    "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+    "quantization": "Q4_K_M",
+    "parameter_size": "3.2B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 2019393189,
+    "server_version": "0.34.0"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "monitor_prompt_variant": "v3",
+    "monitor_system": "b5893ef525a56bb24ec30c3496f379cc3d3b331337139d66ced246fd2a89b950"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "fresh-monitor-8b-v3",
+  "manifest_run_id": "fresh-monitor-8b-v3",
+  "command": "monitor",
+  "dataset_source": "agent_unprompted",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "c42b40204c966c659c3ad0bb04a7b5b755c1c26a",
+  "timestamps": {
+   "created_at": "2026-10-01T22:41:21.034+00:00",
+   "session_starts": [
+    "2026-10-01T22:41:21.034+00:00"
+   ],
+   "status_updated_at": "2026-10-01T23:09:05.772+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "conditions": [
+    "A",
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/fresh-actor"
+   ]
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 30,
+    "samples_per_scenario": 1,
+    "seed": 3000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 1500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v3",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "monitor",
+    "provider": "ollama",
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+    "quantization": "Q4_K_M",
+    "parameter_size": "8.0B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 4920753328,
+    "server_version": "0.34.0"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "monitor_prompt_variant": "v3",
+    "monitor_system": "b5893ef525a56bb24ec30c3496f379cc3d3b331337139d66ced246fd2a89b950"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "hvf-calib-3b",
+  "manifest_run_id": "hvf-calib-3b",
+  "command": "calibrate",
+  "dataset_source": "capability_calibration",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "f40ad1df9a94f4d917c57097237e26e59f1b577d",
+  "timestamps": {
+   "created_at": "2026-10-05T11:50:48.221+00:00",
+   "session_starts": [
+    "2026-10-05T11:50:48.221+00:00",
+    "2026-10-05T23:39:17.709+00:00"
+   ],
+   "status_updated_at": "2026-10-05T23:42:28.486+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "clean": true,
+   "source": "capability_calibration"
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 10,
+    "samples_per_scenario": 1,
+    "seed": 6100
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 2500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v1",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "actor",
+    "provider": "ollama",
+    "model_id": "llama3.2:3b",
+    "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+    "quantization": "Q4_K_M",
+    "parameter_size": "3.2B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 2019393189,
+    "server_version": "0.35.1"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "actor_elicitation": "none",
+    "actor_system": "7b0c59b81268a20b1c95e53ec5d1728a3d65813af7efb8926dc200764fb680a5"
+   },
+   {
+    "actor_elicitation": "none",
+    "actor_system": "7b0c59b81268a20b1c95e53ec5d1728a3d65813af7efb8926dc200764fb680a5"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   },
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 2,
+  "resumed": true,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": true
+  }
+ },
+ {
+  "run_id": "hvf-calib-8b",
+  "manifest_run_id": "hvf-calib-8b",
+  "command": "calibrate",
+  "dataset_source": "capability_calibration",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "f40ad1df9a94f4d917c57097237e26e59f1b577d",
+  "timestamps": {
+   "created_at": "2026-10-05T11:40:27.511+00:00",
+   "session_starts": [
+    "2026-10-05T11:40:27.511+00:00"
+   ],
+   "status_updated_at": "2026-10-05T11:50:47.633+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "clean": true,
+   "source": "capability_calibration"
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 10,
+    "samples_per_scenario": 1,
+    "seed": 6100
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 2500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v1",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "actor",
+    "provider": "ollama",
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+    "quantization": "Q4_K_M",
+    "parameter_size": "8.0B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 4920753328,
+    "server_version": "0.35.1"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "actor_elicitation": "none",
+    "actor_system": "7b0c59b81268a20b1c95e53ec5d1728a3d65813af7efb8926dc200764fb680a5"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": true
+  }
+ },
+ {
+  "run_id": "hvf-d1-actor",
+  "manifest_run_id": "hvf-d1-actor",
+  "command": "generate",
+  "dataset_source": "agent_unprompted",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "f40ad1df9a94f4d917c57097237e26e59f1b577d",
+  "timestamps": {
+   "created_at": "2026-10-05T23:42:28.750+00:00",
+   "session_starts": [
+    "2026-10-05T23:42:28.751+00:00"
+   ],
+   "status_updated_at": "2026-10-06T01:03:17.703+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "clean": false,
+   "source": "agent_unprompted"
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 60,
+    "samples_per_scenario": 1,
+    "seed": 6000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 2500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v1",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "actor",
+    "provider": "ollama",
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+    "quantization": "Q4_K_M",
+    "parameter_size": "8.0B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 4920753328,
+    "server_version": "0.35.1"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "actor_elicitation": "none",
+    "actor_system": "63b9bf998bad7093f46a2582f48531e5e1afbd2dd39122220fa7412d38551455"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "hvf-d1-mon-3b-v3",
+  "manifest_run_id": "hvf-d1-mon-3b-v3",
+  "command": "monitor",
+  "dataset_source": "agent_unprompted",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "f40ad1df9a94f4d917c57097237e26e59f1b577d",
+  "timestamps": {
+   "created_at": "2026-10-06T01:03:18.469+00:00",
+   "session_starts": [
+    "2026-10-06T01:03:18.469+00:00"
+   ],
+   "status_updated_at": "2026-10-06T01:35:33.581+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "conditions": [
+    "A",
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "rule",
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/hvf-d1-actor"
+   ]
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 60,
+    "samples_per_scenario": 1,
+    "seed": 6000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 2500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v3",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "monitor",
+    "provider": "ollama",
+    "model_id": "llama3.2:3b",
+    "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+    "quantization": "Q4_K_M",
+    "parameter_size": "3.2B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 2019393189,
+    "server_version": "0.35.1"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "monitor_prompt_variant": "v3",
+    "monitor_system": "b5893ef525a56bb24ec30c3496f379cc3d3b331337139d66ced246fd2a89b950"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "hvf-d1-mon-3b-v5",
+  "manifest_run_id": "hvf-d1-mon-3b-v5",
+  "command": "monitor",
+  "dataset_source": "agent_unprompted",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "f40ad1df9a94f4d917c57097237e26e59f1b577d",
+  "timestamps": {
+   "created_at": "2026-10-06T01:51:46.525+00:00",
+   "session_starts": [
+    "2026-10-06T01:51:46.525+00:00"
+   ],
+   "status_updated_at": "2026-10-06T02:20:52.603+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "conditions": [
+    "A",
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/hvf-d1-actor"
+   ]
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 60,
+    "samples_per_scenario": 1,
+    "seed": 6000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 2500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v5",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "monitor",
+    "provider": "ollama",
+    "model_id": "llama3.2:3b",
+    "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+    "quantization": "Q4_K_M",
+    "parameter_size": "3.2B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 2019393189,
+    "server_version": "0.35.1"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "monitor_prompt_variant": "v5",
+    "monitor_system": "337ce8b45744552d6e5a8f279d4aae177b8f45f54ba2fbe656cf6608e25e20a3"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "hvf-d1-mon-8b-v3",
+  "manifest_run_id": "hvf-d1-mon-8b-v3",
+  "command": "monitor",
+  "dataset_source": "agent_unprompted",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "f40ad1df9a94f4d917c57097237e26e59f1b577d",
+  "timestamps": {
+   "created_at": "2026-10-06T02:35:14.316+00:00",
+   "session_starts": [
+    "2026-10-06T02:35:14.316+00:00"
+   ],
+   "status_updated_at": "2026-10-06T03:42:07.812+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "conditions": [
+    "A",
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/hvf-d1-actor"
+   ]
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 60,
+    "samples_per_scenario": 1,
+    "seed": 6000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 2500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v3",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "monitor",
+    "provider": "ollama",
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+    "quantization": "Q4_K_M",
+    "parameter_size": "8.0B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 4920753328,
+    "server_version": "0.35.1"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "monitor_prompt_variant": "v3",
+    "monitor_system": "b5893ef525a56bb24ec30c3496f379cc3d3b331337139d66ced246fd2a89b950"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "hvf-d1-mon-8b-v5",
+  "manifest_run_id": "hvf-d1-mon-8b-v5",
+  "command": "monitor",
+  "dataset_source": "agent_unprompted",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "f40ad1df9a94f4d917c57097237e26e59f1b577d",
+  "timestamps": {
+   "created_at": "2026-10-06T04:14:09.658+00:00",
+   "session_starts": [
+    "2026-10-06T04:14:09.658+00:00"
+   ],
+   "status_updated_at": "2026-10-06T05:15:02.092+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "conditions": [
+    "A",
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/hvf-d1-actor"
+   ]
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 60,
+    "samples_per_scenario": 1,
+    "seed": 6000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 2500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v5",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "monitor",
+    "provider": "ollama",
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+    "quantization": "Q4_K_M",
+    "parameter_size": "8.0B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 4920753328,
+    "server_version": "0.35.1"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "monitor_prompt_variant": "v5",
+    "monitor_system": "337ce8b45744552d6e5a8f279d4aae177b8f45f54ba2fbe656cf6608e25e20a3"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "hvf-d3-fixtures",
+  "manifest_run_id": "fixtures",
+  "command": "fixtures",
+  "dataset_source": "scripted_fixture",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "f40ad1df9a94f4d917c57097237e26e59f1b577d",
+  "timestamps": {
+   "created_at": "2026-10-05T11:38:27.973+00:00",
+   "session_starts": [],
+   "status_updated_at": "2026-10-05T11:38:28.062+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "dev_fraction": 0.5,
+   "n_distractors": 2,
+   "n_required": 4,
+   "policy_set": "all",
+   "seeds": [
+    6200,
+    6201,
+    6202,
+    6203,
+    6204
+   ]
+  },
+  "config": null,
+  "models": [],
+  "prompt_hashes": [],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 0,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "hvf-d3-mon-3b-v3",
+  "manifest_run_id": "hvf-d3-mon-3b-v3",
+  "command": "monitor",
+  "dataset_source": "scripted_fixture",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "f40ad1df9a94f4d917c57097237e26e59f1b577d",
+  "timestamps": {
+   "created_at": "2026-10-06T01:35:33.979+00:00",
+   "session_starts": [
+    "2026-10-06T01:35:33.979+00:00"
+   ],
+   "status_updated_at": "2026-10-06T01:51:46.225+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "conditions": [
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "rule",
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/hvf-d3-fixtures"
+   ]
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 60,
+    "samples_per_scenario": 1,
+    "seed": 6000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 2500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v3",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "monitor",
+    "provider": "ollama",
+    "model_id": "llama3.2:3b",
+    "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+    "quantization": "Q4_K_M",
+    "parameter_size": "3.2B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 2019393189,
+    "server_version": "0.35.1"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "monitor_prompt_variant": "v3",
+    "monitor_system": "b5893ef525a56bb24ec30c3496f379cc3d3b331337139d66ced246fd2a89b950"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "hvf-d3-mon-3b-v5",
+  "manifest_run_id": "hvf-d3-mon-3b-v5",
+  "command": "monitor",
+  "dataset_source": "scripted_fixture",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "f40ad1df9a94f4d917c57097237e26e59f1b577d",
+  "timestamps": {
+   "created_at": "2026-10-06T02:20:52.987+00:00",
+   "session_starts": [
+    "2026-10-06T02:20:52.987+00:00"
+   ],
+   "status_updated_at": "2026-10-06T02:35:13.920+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "conditions": [
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/hvf-d3-fixtures"
+   ]
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 60,
+    "samples_per_scenario": 1,
+    "seed": 6000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 2500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v5",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "monitor",
+    "provider": "ollama",
+    "model_id": "llama3.2:3b",
+    "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+    "quantization": "Q4_K_M",
+    "parameter_size": "3.2B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 2019393189,
+    "server_version": "0.35.1"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "monitor_prompt_variant": "v5",
+    "monitor_system": "337ce8b45744552d6e5a8f279d4aae177b8f45f54ba2fbe656cf6608e25e20a3"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "hvf-d3-mon-8b-v3",
+  "manifest_run_id": "hvf-d3-mon-8b-v3",
+  "command": "monitor",
+  "dataset_source": "scripted_fixture",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "f40ad1df9a94f4d917c57097237e26e59f1b577d",
+  "timestamps": {
+   "created_at": "2026-10-06T03:42:08.326+00:00",
+   "session_starts": [
+    "2026-10-06T03:42:08.326+00:00"
+   ],
+   "status_updated_at": "2026-10-06T04:14:09.185+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "conditions": [
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/hvf-d3-fixtures"
+   ]
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 60,
+    "samples_per_scenario": 1,
+    "seed": 6000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 2500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v3",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "monitor",
+    "provider": "ollama",
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+    "quantization": "Q4_K_M",
+    "parameter_size": "8.0B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 4920753328,
+    "server_version": "0.35.1"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "monitor_prompt_variant": "v3",
+    "monitor_system": "b5893ef525a56bb24ec30c3496f379cc3d3b331337139d66ced246fd2a89b950"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "hvf-d3-mon-8b-v5",
+  "manifest_run_id": "hvf-d3-mon-8b-v5",
+  "command": "monitor",
+  "dataset_source": "scripted_fixture",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "f40ad1df9a94f4d917c57097237e26e59f1b577d",
+  "timestamps": {
+   "created_at": "2026-10-06T05:15:02.597+00:00",
+   "session_starts": [
+    "2026-10-06T05:15:02.597+00:00"
+   ],
+   "status_updated_at": "2026-10-06T05:43:47.475+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "conditions": [
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/hvf-d3-fixtures"
+   ]
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 60,
+    "samples_per_scenario": 1,
+    "seed": 6000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 2500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v5",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "monitor",
+    "provider": "ollama",
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+    "quantization": "Q4_K_M",
+    "parameter_size": "8.0B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 4920753328,
+    "server_version": "0.35.1"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "monitor_prompt_variant": "v5",
+    "monitor_system": "337ce8b45744552d6e5a8f279d4aae177b8f45f54ba2fbe656cf6608e25e20a3"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "local-main-actor",
+  "manifest_run_id": "local-main-actor",
+  "command": "generate",
+  "dataset_source": "agent_unprompted",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "ef74c7db490039d5a0ec92e42ec507a0008b1f6d",
+  "timestamps": {
+   "created_at": "2026-09-28T16:15:38.890+00:00",
+   "session_starts": [
+    "2026-09-28T16:15:38.890+00:00"
+   ],
+   "status_updated_at": "2026-09-28T17:11:42.386+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "clean": false,
+   "source": "agent_unprompted"
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 30,
+    "samples_per_scenario": 1,
+    "seed": 3000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 1500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "actor",
+    "provider": "ollama",
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+    "quantization": "Q4_K_M",
+    "parameter_size": "8.0B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 4920753328,
+    "server_version": "0.34.0"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "actor_system": "63b9bf998bad7093f46a2582f48531e5e1afbd2dd39122220fa7412d38551455"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": true,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "local-main-monitor",
+  "manifest_run_id": "local-main-monitor",
+  "command": "monitor",
+  "dataset_source": "agent_unprompted",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "ef74c7db490039d5a0ec92e42ec507a0008b1f6d",
+  "timestamps": {
+   "created_at": "2026-09-28T17:11:42.940+00:00",
+   "session_starts": [
+    "2026-09-28T17:11:42.940+00:00"
+   ],
+   "status_updated_at": "2026-09-28T17:29:57.355+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "conditions": [
+    "A",
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "rule",
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/local-main-actor"
+   ]
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 30,
+    "samples_per_scenario": 1,
+    "seed": 3000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 1500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "monitor",
+    "provider": "ollama",
+    "model_id": "llama3.2:3b",
+    "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+    "quantization": "Q4_K_M",
+    "parameter_size": "3.2B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 2019393189,
+    "server_version": "0.34.0"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "monitor_system": "1e8062c1cf3572c169696ba1dbd74bc4ad82b2c70ae24319415a147fe7bd7e47"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "local-main-monitor-3b-v2",
+  "manifest_run_id": "local-main-monitor-3b-v2",
+  "command": "monitor",
+  "dataset_source": "agent_unprompted",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "eef5a792e2104cc3598016f58b55b5224040d800",
+  "timestamps": {
+   "created_at": "2026-09-29T02:20:26.911+00:00",
+   "session_starts": [
+    "2026-09-29T02:20:26.911+00:00"
+   ],
+   "status_updated_at": "2026-09-29T02:31:34.587+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "conditions": [
+    "A",
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/local-main-actor"
+   ]
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 30,
+    "samples_per_scenario": 1,
+    "seed": 3000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 1500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v2",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "monitor",
+    "provider": "ollama",
+    "model_id": "llama3.2:3b",
+    "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+    "quantization": "Q4_K_M",
+    "parameter_size": "3.2B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 2019393189,
+    "server_version": "0.34.0"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "monitor_prompt_variant": "v2",
+    "monitor_system": "126f11c793a84cba13c5d3e4591e4479a5e6c3d391993fa9863d278bdb16b407"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "local-main-monitor-3b-v3",
+  "manifest_run_id": "local-main-monitor-3b-v3",
+  "command": "monitor",
+  "dataset_source": "agent_unprompted",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "034f660219c194901c8350de714705eacc30bf8c",
+  "timestamps": {
+   "created_at": "2026-09-29T02:31:34.943+00:00",
+   "session_starts": [
+    "2026-09-29T02:31:34.943+00:00"
+   ],
+   "status_updated_at": "2026-09-29T03:02:53.587+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "conditions": [
+    "A",
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/local-main-actor"
+   ]
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 30,
+    "samples_per_scenario": 1,
+    "seed": 3000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 1500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v3",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "monitor",
+    "provider": "ollama",
+    "model_id": "llama3.2:3b",
+    "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+    "quantization": "Q4_K_M",
+    "parameter_size": "3.2B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 2019393189,
+    "server_version": "0.34.0"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "monitor_prompt_variant": "v3",
+    "monitor_system": "b5893ef525a56bb24ec30c3496f379cc3d3b331337139d66ced246fd2a89b950"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "local-main-monitor-3b-v4",
+  "manifest_run_id": "local-main-monitor-3b-v4",
+  "command": "monitor",
+  "dataset_source": "agent_unprompted",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "034f660219c194901c8350de714705eacc30bf8c",
+  "timestamps": {
+   "created_at": "2026-09-29T03:02:53.866+00:00",
+   "session_starts": [
+    "2026-09-29T03:02:53.867+00:00"
+   ],
+   "status_updated_at": "2026-09-29T03:34:13.906+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "conditions": [
+    "A",
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/local-main-actor"
+   ]
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 30,
+    "samples_per_scenario": 1,
+    "seed": 3000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 1500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v4",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "monitor",
+    "provider": "ollama",
+    "model_id": "llama3.2:3b",
+    "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+    "quantization": "Q4_K_M",
+    "parameter_size": "3.2B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 2019393189,
+    "server_version": "0.34.0"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "monitor_prompt_variant": "v4",
+    "monitor_system": "9d4699b31a62723a471a625ff7da7b836de9853c86a9d0d731a84f6384c6c93d"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "local-main-monitor-8b",
+  "manifest_run_id": "local-main-monitor-8b",
+  "command": "monitor",
+  "dataset_source": "agent_unprompted",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "28165ac3ddb1327b074b7535b6d039bdabc6c2f1",
+  "timestamps": {
+   "created_at": "2026-09-28T20:51:20.137+00:00",
+   "session_starts": [
+    "2026-09-28T20:51:20.137+00:00"
+   ],
+   "status_updated_at": "2026-09-28T21:29:50.632+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "conditions": [
+    "A",
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/local-main-actor"
+   ]
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 30,
+    "samples_per_scenario": 1,
+    "seed": 3000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 1500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "monitor",
+    "provider": "ollama",
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+    "quantization": "Q4_K_M",
+    "parameter_size": "8.0B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 4920753328,
+    "server_version": "0.34.0"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "monitor_system": "1e8062c1cf3572c169696ba1dbd74bc4ad82b2c70ae24319415a147fe7bd7e47"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": false
+  }
+ },
+ {
+  "run_id": "local-main-monitor-8b-v3",
+  "manifest_run_id": "local-main-monitor-8b-v3",
+  "command": "monitor",
+  "dataset_source": "agent_unprompted",
+  "git_commit": null,
+  "git_commit_note": "not recorded by the pipeline",
+  "head_commit_by_timestamp": "df32dfb75f7570cad7a427e685fc29aa64d82325",
+  "timestamps": {
+   "created_at": "2026-09-29T10:34:26.842+00:00",
+   "session_starts": [
+    "2026-09-29T10:34:26.842+00:00"
+   ],
+   "status_updated_at": "2026-09-29T11:13:20.798+00:00",
+   "final_state": "completed"
+  },
+  "params": {
+   "conditions": [
+    "A",
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/local-main-actor"
+   ]
+  },
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 30,
+    "samples_per_scenario": 1,
+    "seed": 3000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 1500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v3",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "models": [
+   {
+    "role": "monitor",
+    "provider": "ollama",
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+    "quantization": "Q4_K_M",
+    "parameter_size": "8.0B",
+    "family": "llama",
+    "format": "gguf",
+    "size_bytes": 4920753328,
+    "server_version": "0.34.0"
+   }
+  ],
+  "prompt_hashes": [
+   {
+    "monitor_prompt_variant": "v3",
+    "monitor_system": "b5893ef525a56bb24ec30c3496f379cc3d3b331337139d66ced246fd2a89b950"
+   }
+  ],
+  "software": [
+   {
+    "google-genai": "2.25.0",
+    "httpx": "0.28.1",
+    "machine": "arm64",
+    "matplotlib": "3.11.2",
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "weak-monitor-lab": "0.1.0"
+   }
+  ],
+  "n_sessions": 1,
+  "resumed": false,
+  "derived_at_export": {
+   "labels_v2_recomputed": false,
+   "gap_recomputed": false
+  }
+ }
+]
