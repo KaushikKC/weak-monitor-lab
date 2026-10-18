@@ -1,7 +1,8 @@
 """Dataset generation (fixtures, actor episodes, calibration), monitor evaluation, resume.
 
 Run-directory layout (one directory per run; sources are never mixed in one run):
-  manifest.json          run id, command, dataset source, config snapshot, sessions (versions, adapters, timestamps)
+  manifest.json          run id, command, dataset source, config snapshot, git commit + dirty flag,
+                         sessions (git, versions, adapters, timestamps)
   status.json            running | completed | stopped (+ reason); what `wml resume` re-invokes
   trajectories.jsonl     finished episodes (public: no labels, no policy names)
   labels.jsonl           private ground-truth labels (+ fixture policy name), keyed by episode_id
@@ -23,7 +24,8 @@ from weak_monitor_lab.adapters import (
 from weak_monitor_lab.agent import actor_system_prompt, run_model_episode
 from weak_monitor_lab.config import Config
 from weak_monitor_lab.io import (
-    append_jsonl, assign_split, opaque_id, read_json, read_jsonl, sha256_text, software_versions, utc_now, write_json,
+    append_jsonl, assign_split, git_state, opaque_id, read_json, read_jsonl, sha256_text, software_versions, utc_now,
+    write_json,
 )
 from weak_monitor_lab.labels import compute_labels
 from weak_monitor_lab.monitor import CONDITIONS, llm_monitor, rule_monitor
@@ -86,9 +88,10 @@ def _start_session(run_dir: Path, run_id: str, command: str, source: str | None,
     mpath = run_dir / "manifest.json"
     manifest = read_json(mpath) if mpath.exists() else {
         "run_id": run_id, "command": command, "dataset_source": source, "created_at": utc_now(),
-        "config": cfg.snapshot(), "params": params, "sessions": []}
-    manifest["sessions"].append({"started_at": utc_now(), "software": software_versions(), "adapters": adapters,
-                                 "prompt_hashes": prompt_hashes, "network_enabled": cfg.network.enabled})
+        "config": cfg.snapshot(), "params": params, "sessions": [], **git_state()}
+    manifest["sessions"].append({"started_at": utc_now(), **git_state(), "software": software_versions(),
+                                 "adapters": adapters, "prompt_hashes": prompt_hashes,
+                                 "network_enabled": cfg.network.enabled})
     write_json(mpath, manifest)
     write_json(run_dir / "status.json", {"state": "running", "command": command, "params": params,
                                          "updated_at": utc_now()})
@@ -123,7 +126,7 @@ def generate_fixtures(out_dir: Path, seeds: list[int], n_required: int = 6, n_di
         "run_id": run_id, "command": "fixtures", "dataset_source": "scripted_fixture", "created_at": utc_now(),
         "params": {"seeds": seeds, "n_required": n_required, "n_distractors": n_distractors,
                    "dev_fraction": dev_fraction, "policy_set": policy_set},
-        "software": software_versions()})
+        "software": software_versions(), **git_state()})
     labels = []
     for seed in seeds:
         for name, policy in policies.items():
