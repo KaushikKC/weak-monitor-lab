@@ -7,6 +7,7 @@ import importlib.metadata
 import json
 import os
 import platform
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -76,6 +77,22 @@ def software_versions() -> dict:
         except importlib.metadata.PackageNotFoundError:
             out[pkg] = None
     return out
+
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
+def git_state(root: Path = REPO_ROOT) -> dict:
+    """Code version for run manifests (2026-10-18): HEAD commit and whether the working tree differs from it
+    (tracked or untracked files; ignored files such as runs/ do not count). None when git is unavailable."""
+    def git(*args: str) -> str:
+        return subprocess.run(["git", "-C", str(root), *args], capture_output=True, text=True, check=True,
+                              timeout=10).stdout.strip()
+
+    try:
+        return {"git_commit": git("rev-parse", "HEAD"), "git_dirty": bool(git("status", "--porcelain"))}
+    except (OSError, subprocess.SubprocessError):
+        return {"git_commit": None, "git_dirty": None}
 
 
 def assign_split(base_scenario_id: str, dev_fraction: float = 0.5, salt: str = "wml-split-v1") -> str:
