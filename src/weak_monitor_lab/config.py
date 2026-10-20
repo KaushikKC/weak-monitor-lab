@@ -11,7 +11,7 @@ import tomllib
 from pathlib import Path
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 Provider = Literal["mock", "ollama", "gemini"]
 SECRET_ENV_VARS = ("GEMINI_API_KEY", "GOOGLE_API_KEY")
@@ -79,12 +79,45 @@ class ExperimentConfig(_M):
     seed: int = 1234
     n_scenarios: int = Field(5, ge=1)
     samples_per_scenario: int = Field(1, ge=1)
-    n_required: int = Field(6, ge=4, le=30)
+    n_required: int = Field(6, ge=3, le=30)  # 3 only with environment variant v2c (checked in Config)
     n_distractors: int = Field(2, ge=0, le=20)
     dev_fraction: float = Field(0.5, ge=0.0, le=1.0)
     # Actor elicitation (agent.ELICITATIONS). "none" for every dataset source except
     # elicited_adversarial, which requires a non-"none" value. Enforced in pipeline.run_actor.
     elicitation: Literal["none", "score_pressure"] = "none"
+
+
+# Environment v2 candidates (roadmap A2, 2026-10-21). v1 is the published environment and the default.
+#   v2a: clearer tool descriptions (sim.env.V2_TOOL_DESCRIPTIONS)
+#   v2b: v2a + one worked example in the actor system prompt (agent.WORKED_EXAMPLE)
+#   v2c: v2b + 3 required orders ([experiment].n_required = 3)
+# Unchanged in every variant: proxy, permissive tools, verifier, label predicates, task text, no cheating prompt.
+ENV_VARIANTS = {
+    "v1": {"version": "v1", "clear_tool_descriptions": False, "worked_example": False, "n_required": None},
+    "v2a": {"version": "v2", "clear_tool_descriptions": True, "worked_example": False, "n_required": None},
+    "v2b": {"version": "v2", "clear_tool_descriptions": True, "worked_example": True, "n_required": None},
+    "v2c": {"version": "v2", "clear_tool_descriptions": True, "worked_example": True, "n_required": 3},
+}
+
+
+class EnvironmentConfig(_M):
+    version: Literal["v1", "v2"] = "v1"
+    variant: Literal["v1", "v2a", "v2b", "v2c"] = "v1"
+
+    @model_validator(mode="after")
+    def _consistent(self) -> "EnvironmentConfig":
+        if ENV_VARIANTS[self.variant]["version"] != self.version:
+            raise ValueError(f"environment variant {self.variant!r} belongs to version "
+                             f"{ENV_VARIANTS[self.variant]['version']!r}, not {self.version!r}")
+        return self
+
+    @property
+    def clear_tool_descriptions(self) -> bool:
+        return ENV_VARIANTS[self.variant]["clear_tool_descriptions"]
+
+    @property
+    def worked_example(self) -> bool:
+        return ENV_VARIANTS[self.variant]["worked_example"]
 
 
 class Config(_M):
@@ -94,6 +127,18 @@ class Config(_M):
     network: NetworkConfig = NetworkConfig()
     limits: LimitsConfig = LimitsConfig()
     experiment: ExperimentConfig = ExperimentConfig()
+    environment: EnvironmentConfig = EnvironmentConfig()
+
+    @model_validator(mode="after")
+    def _n_required_matches_variant(self) -> "Config":
+        fixed = ENV_VARIANTS[self.environment.variant]["n_required"]
+        n = self.experiment.n_required
+        if fixed is not None and n != fixed:
+            raise ValueError(f"environment variant {self.environment.variant} needs n_required = {fixed}, got {n}")
+        if fixed is None and n < 4:
+            raise ValueError(f"n_required = {n} needs environment variant v2c; variant "
+                             f"{self.environment.variant} needs n_required >= 4")
+        return self
 
     def snapshot(self) -> dict:
         """Serializable, secret-free config snapshot."""
