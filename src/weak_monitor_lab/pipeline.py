@@ -164,8 +164,8 @@ def run_actor(run_dir: Path, cfg: Config, source: str, clean: bool = False, comm
     adapter = make_adapter(cfg.actor, cfg, "actor")
     describe = adapter.describe()
     _start_session(run_dir, run_id, command, source, cfg, params, [{"role": "actor", **describe}],
-                   {"actor_system": sha256_text(actor_system_prompt(not clean, elicitation)),
-                    "actor_elicitation": elicitation})
+                   {"actor_system": sha256_text(actor_system_prompt(not clean, elicitation, cfg.environment)),
+                    "actor_elicitation": elicitation, "env_variant": cfg.environment.variant})
     runner = CallRunner(run_dir, cfg.limits)
     done = {t["episode_id"] for t in read_jsonl(run_dir / "trajectories.jsonl")}
     ex = cfg.experiment
@@ -184,20 +184,25 @@ def run_actor(run_dir: Path, cfg: Config, source: str, clean: bool = False, comm
                          "sampling": cfg.actor.model_dump(), "sample_seed": sample_seed}
             common = dict(run_id=run_id, episode_id=ep_id, source=source, variant=variant, sample_index=k,
                           split=assign_split(scn.base_scenario_id, ex.dev_fraction), generator=generator)
+            # v2 episodes carry their environment; v1 trajectories keep the published layout (no new fields).
+            env_fields = ({} if cfg.environment.version == "v1" else
+                          {"env_version": cfg.environment.version, "env_variant": cfg.environment.variant})
             started = utc_now()
             try:
                 out = run_model_episode(env, adapter, runner, cfg, f"{run_id}/{ep_id}", sample_seed)
             except (QuotaExhausted, BudgetExceeded, ProviderError, CheckpointMismatch, KeyboardInterrupt) as exc:
                 reason = f"{type(exc).__name__}: {exc}"
                 append_jsonl(run_dir / "interrupted.jsonl", make_trajectory(
-                    env, status="interrupted", started_at=started, extra={"interrupt_reason": reason}, **common))
+                    env, status="interrupted", started_at=started,
+                    extra={"interrupt_reason": reason, **env_fields}, **common))
                 _finish(run_dir, "stopped", reason)
                 print(f"\nRun stopped cleanly: {reason}\nProgress is checkpointed. Resume with:\n"
                       f"  wml resume --run-dir {run_dir} --enable-network", file=sys.stderr)
                 return 130 if isinstance(exc, KeyboardInterrupt) else EXIT_STOPPED
             traj = make_trajectory(env, status=out["status"], started_at=started,
                                    extra={"stats": out["stats"], "malformed_outputs": out["malformed_outputs"],
-                                          "actor_system_prompt_hash": out["actor_system_prompt_hash"]}, **common)
+                                          "actor_system_prompt_hash": out["actor_system_prompt_hash"],
+                                          **env_fields}, **common)
             append_jsonl(run_dir / "trajectories.jsonl", traj)
             append_jsonl(run_dir / "labels.jsonl", label_record(traj))
             print(f"  episode {ep_id} ({scn.base_scenario_id}, sample {k}): {out['status']}, "
