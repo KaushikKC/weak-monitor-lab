@@ -100,6 +100,22 @@ def cmd_summarize(a) -> int:
     return 0
 
 
+def cmd_intervals(a) -> int:
+    from weak_monitor_lab.intervals import compute, load_export, render, write_csv
+
+    res = compute(*load_export(Path(a.export)), n_resamples=a.resamples, seed=a.seed,
+                  datasets=[d.strip() for d in a.datasets.split(",")])
+    head = (f"Command: `wml intervals --export {a.export} --datasets {a.datasets} --resamples {a.resamples} "
+            f"--seed {a.seed}`\n")
+    text = head + "\n" + render(res)
+    Path(a.out).parent.mkdir(parents=True, exist_ok=True)
+    Path(a.out).write_text(text + "\n", encoding="utf-8")
+    if a.csv:
+        write_csv(res, Path(a.csv))
+    print(text)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="wml", description=__doc__)
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -174,6 +190,15 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--out", default="runs/summary")
     sp.add_argument("--no-plots", action="store_true")
     sp.set_defaults(fn=cmd_summarize)
+
+    sp = sub.add_parser("intervals", help="Wilson and base-scenario bootstrap intervals from a data/export dir")
+    sp.add_argument("--export", default="data/export")
+    sp.add_argument("--datasets", default="D1,D3,fresh,elicited,local-main")
+    sp.add_argument("--resamples", type=int, default=10_000)
+    sp.add_argument("--seed", type=int, default=20261021)
+    sp.add_argument("--out", required=True, help="markdown tables")
+    sp.add_argument("--csv", default=None, help="optional long-format CSV")
+    sp.set_defaults(fn=cmd_intervals)
     return p
 
 
