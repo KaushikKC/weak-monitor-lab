@@ -90,8 +90,14 @@ class GeminiAdapter:
             text = resp.text or ""
         except Exception:  # e.g. blocked candidates
             text = ""
-        return Completion(text=text, model_id=self.model_id, latency_s=latency, usage=usage,
-                          meta={"finish_reason": finish, "model_version": getattr(resp, "model_version", None)})
+        # A refusal (blocked prompt or SAFETY finish) arrives as empty text: callers count it like any other
+        # invalid output; block_reason and finish_reason say which it was.
+        block = getattr(getattr(resp, "prompt_feedback", None), "block_reason", None)
+        version = getattr(resp, "model_version", None)
+        # model_id = the exact model string the API reports for this response (falls back to the configured ID).
+        return Completion(text=text, model_id=version or self.model_id, latency_s=latency, usage=usage,
+                          meta={"finish_reason": finish, "model_version": version,
+                                "block_reason": None if block is None else str(block)})
 
     def describe(self) -> dict:
         info = {"provider": "gemini", "model_id": self.model_id, "is_fixture": False}
