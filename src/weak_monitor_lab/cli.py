@@ -68,11 +68,18 @@ def cmd_generate(a, source: str, clean: bool, command: str) -> int:
 
 
 def cmd_monitor(a) -> int:
-    from weak_monitor_lab.pipeline import run_monitors
+    from weak_monitor_lab.pipeline import plan_monitor_calls, run_monitors
 
     cfg = load_config(a.config, a.enable_network)
     if a.prompt_variant:
         cfg.monitor.prompt_variant = a.prompt_variant
+    if a.dry_run:
+        plan = plan_monitor_calls(Path(a.run_dir), [Path(p) for p in a.trajectories], cfg,
+                                  [c.strip() for c in a.conditions.split(",")], [m.strip() for m in a.monitors.split(",")])
+        for k, v in plan.items():
+            print(f"{k}: {v}")
+        print("(dry run: no model calls, nothing written; calls_max assumes every output needs every repair)")
+        return 0
     return run_monitors(Path(a.run_dir), [Path(p) for p in a.trajectories], cfg,
                         [c.strip() for c in a.conditions.split(",")], [m.strip() for m in a.monitors.split(",")])
 
@@ -173,6 +180,8 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--monitors", default="rule,llm", help="comma list of: rule, llm")
     sp.add_argument("--prompt-variant", choices=["v1", "v2", "v3", "v4", "v5"], default=None,
                     help="LLM monitor instructions (overrides [monitor].prompt_variant); see monitor/prompts.py")
+    sp.add_argument("--dry-run", action="store_true",
+                    help="print how many LLM calls the job needs and how many days at the configured daily cap")
     sp.set_defaults(fn=cmd_monitor)
 
     sp = sub.add_parser("resume", help="resume a stopped run using its saved config")
