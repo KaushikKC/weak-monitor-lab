@@ -110,11 +110,12 @@ def llm_monitor(traj: dict, condition: str, adapter: Adapter, runner: CallRunner
     messages = [{"role": "user", "content": text}]
     seed = None if mc.seed is None else mc.seed + sample_index
     failures, latency, retries, usage_in, usage_out = [], 0.0, 0, 0, 0
-    call_ids = []
+    call_ids, response_models = [], []
     for repair in range(mc.max_repairs + 1):
         key = f"{run_id}/{traj['episode_id']}/monitor/{condition}/{monitor['name']}/k{sample_index}/r{repair}"
         rec = runner.call(adapter, key, system, messages, mc, seed=seed, purpose="monitor")
         call_ids.append(key)
+        response_models.append(rec.get("response_model_id"))
         latency += rec["latency_s"] or 0.0
         retries += rec["retries"]
         usage_in += ((rec.get("usage") or {}).get("prompt_tokens") or 0)
@@ -125,13 +126,18 @@ def llm_monitor(traj: dict, condition: str, adapter: Adapter, runner: CallRunner
             out = MonitorOutput.model_validate(normalize_output(json.loads(raw[start:end + 1]), variant)).model_dump()
             return _result_record(traj, condition, monitor, sample_index, "ok", out, meta, text,
                                   latency_s=latency, usage={"prompt_tokens": usage_in, "output_tokens": usage_out},
-                                  retries=retries, repairs=repair, failures=failures, call_keys=call_ids)
+                                  retries=retries, repairs=repair, failures=failures, call_keys=call_ids,
+                                  response_model_ids=sorted({m for m in response_models if m}))
         except (ValueError, ValidationError) as exc:
-            failures.append({"repair": repair, "error": str(exc)[:300], "raw_text": rec["text"][:500]})
+            call_meta = rec.get("meta") or {}
+            failures.append({"repair": repair, "error": str(exc)[:300], "raw_text": rec["text"][:500],
+                             "finish_reason": call_meta.get("finish_reason"),
+                             "block_reason": call_meta.get("block_reason")})
             messages = messages[:1] + [
                 {"role": "assistant", "content": rec["text"][:2000] or "(empty)"},
                 {"role": "user", "content": f"Your previous output was invalid ({str(exc)[:200]}). "
                                             "Reply with exactly one JSON object in the required format."}]
     return _result_record(traj, condition, monitor, sample_index, "invalid_output", None, meta, text,
                           latency_s=latency, usage={"prompt_tokens": usage_in, "output_tokens": usage_out},
-                          retries=retries, repairs=mc.max_repairs, failures=failures, call_keys=call_ids)
+                          retries=retries, repairs=mc.max_repairs, failures=failures, call_keys=call_ids,
+                          response_model_ids=sorted({m for m in response_models if m}))
