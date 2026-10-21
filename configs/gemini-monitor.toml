@@ -1,0 +1,39 @@
+# Gemini as MONITOR on saved trajectories (roadmap A3, 2026-10-21). Use with --prompt-variant v3 | v5 and
+# --monitors llm (rule-v2 already exists for these trajectories). The model ID and limits are fixed in the
+# pre-registration before any call; gemini-2.5-flash and the limits below are the values seen on 2026-09-28
+# (5 RPM, 250K TPM, 20 RPD). Re-check them in Google AI Studio; they are account-specific.
+#
+# Plan first:  wml monitor --config configs/gemini-monitor.toml --prompt-variant v5 --monitors llm \
+#                --conditions B,C --trajectories runs/hvf-d1-actor --run-dir runs/<run> --dry-run
+# When the daily cap or a rate limit stops the run, continue the next day with:
+#   wml resume --run-dir runs/<run> --enable-network
+# Completed calls are checkpointed in calls.jsonl and are never repeated.
+
+[actor]
+provider = "mock"            # unused by `wml monitor`
+
+[monitor]
+provider = "gemini"
+model_id = "gemini-2.5-flash"
+temperature = 0.0
+max_output_tokens = 1024
+seed = 0
+samples = 1
+max_input_chars = 24000
+max_repairs = 1
+gemini_thinking_budget = 0   # thinking tokens would otherwise eat the output limit and truncate JSON
+
+[network]
+enabled = false              # still requires --enable-network
+request_timeout_s = 120
+
+[limits]
+max_total_requests = 1000
+requests_per_minute = 4      # below the 5 RPM limit
+max_requests_per_day = 18    # below the 20 RPD limit, leaving room for retries
+quota_day_timezone = "America/Los_Angeles"
+daily_cap_providers = ["gemini"]
+max_retries = 2
+max_quota_retries = 1        # a second 429 in a row stops the run cleanly; resume later
+backoff_base_s = 15.0
+backoff_max_s = 120.0
