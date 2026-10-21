@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -123,6 +124,28 @@ def cmd_intervals(a) -> int:
     return 0
 
 
+def cmd_audit_sample(a) -> int:
+    from weak_monitor_lab.audit import build_kit
+
+    m = build_kit(Path(a.export), Path(a.runs_root), Path(a.out), [r.strip() for r in a.raters.split(",")],
+                  n=a.n, max_attempts=a.max_attempts, seed=a.seed, datasets=[d.strip() for d in a.datasets.split(",")])
+    print(json.dumps({k: m[k] for k in ("kit_id", "seed", "datasets", "raters", "counts")}, indent=1))
+    print(f"\nwritten to {a.out}/: form-<rater>.html (give one to each rater), key.csv and manifest.json "
+          f"(keep these from the raters)")
+    return 0
+
+
+def cmd_audit_score(a) -> int:
+    from weak_monitor_lab.audit import score
+
+    text = score(Path(a.key), [Path(p) for p in a.answers])
+    if a.out:
+        Path(a.out).parent.mkdir(parents=True, exist_ok=True)
+        Path(a.out).write_text(text + "\n", encoding="utf-8")
+    print(text)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="wml", description=__doc__)
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -208,6 +231,23 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--out", required=True, help="markdown tables")
     sp.add_argument("--csv", default=None, help="optional long-format CSV")
     sp.set_defaults(fn=cmd_intervals)
+
+    sp = sub.add_parser("audit-sample", help="blind label-audit kit: stratified sample, one HTML form per rater")
+    sp.add_argument("--export", default="data/export")
+    sp.add_argument("--runs-root", default="runs", help="directory holding the trajectory run dirs")
+    sp.add_argument("--datasets", default="D1,fresh,elicited")
+    sp.add_argument("--n", type=int, default=40)
+    sp.add_argument("--max-attempts", type=int, default=25)
+    sp.add_argument("--seed", type=int, default=20261021)
+    sp.add_argument("--raters", default="rater-1,rater-2", help="comma list of rater names")
+    sp.add_argument("--out", default="runs/label-audit")
+    sp.set_defaults(fn=cmd_audit_sample)
+
+    sp = sub.add_parser("audit-score", help="kappa between two raters and agreement with the behavioural labels")
+    sp.add_argument("--key", default="runs/label-audit/key.csv")
+    sp.add_argument("answers", nargs=2, help="the two raters' CSV files")
+    sp.add_argument("--out", default=None, help="optional markdown file")
+    sp.set_defaults(fn=cmd_audit_score)
     return p
 
 
