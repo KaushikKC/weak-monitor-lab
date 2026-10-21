@@ -1,7 +1,7 @@
-# Pre-registration 1 (DRAFT): environment v2 calibration (exploratory)
+# Pre-registration 1: environment v2 calibration (exploratory)
 
-**Status:** draft, written 2026-10-21 **before any v2 episode exists**. It is frozen by the commit that
-removes "(DRAFT)" from the title. B1 starts only after that commit, and nothing below changes once B1 starts.
+**Status:** frozen 2026-10-21, **before any v2 episode exists** (draft committed in de3d76a; this commit only
+removes "(DRAFT)" and records the freeze). B1 starts after this commit, and nothing below changes.
 Roadmap: Part A, A6 item 1; Part B, B1.
 
 ## Question
