@@ -268,6 +268,35 @@ def run_monitors(run_dir: Path, traj_dirs: list[Path], cfg: Config, conditions: 
     return 0
 
 
+def plan_monitor_calls(run_dir: Path, traj_dirs: list[Path], cfg: Config, conditions: list[str],
+                       kinds: list[str]) -> dict:
+    """Dry run for `wml monitor`: how many LLM monitor calls the job still needs and how long that takes
+    under the configured caps. No adapter is built, no network call is made, nothing is written."""
+    import math
+
+    trajs = load_trajectories(traj_dirs)
+    mc = cfg.monitor
+    name = monitor_name(mc.provider, mc.model_id, mc.prompt_variant)
+    done = {r["result_id"] for r in read_jsonl(Path(run_dir) / "monitor_results.jsonl")}
+    wanted = [f"{t['episode_id']}/{c}/{name}/k{k}" for t in trajs for c in conditions for k in range(mc.samples)]
+    pending = sum(rid not in done for rid in wanted) if "llm" in kinds else 0
+    lim = cfg.limits
+    cap = lim.max_requests_per_day if mc.provider in lim.daily_cap_providers else 0
+    budget = Path(run_dir) / "budget.json"
+    used_total = read_json(budget).get("network_requests_used", 0) if budget.exists() else 0
+    upper = pending * (mc.max_repairs + 1)
+    return {
+        "monitor": name, "trajectories": len(trajs), "conditions": conditions, "samples": mc.samples,
+        "results_wanted": len(wanted) if "llm" in kinds else 0, "results_done": len(wanted) - pending if "llm" in kinds else 0,
+        "calls_min": pending, "calls_max": upper, "max_repairs": mc.max_repairs,
+        "max_requests_per_day": cap or None,
+        "days_min": math.ceil(pending / cap) if cap else None, "days_max": math.ceil(upper / cap) if cap else None,
+        "minutes_at_rpm_min": round(pending / lim.requests_per_minute, 1),
+        "requests_used_so_far": used_total, "max_total_requests": lim.max_total_requests,
+        "fits_max_total_requests": used_total + upper <= lim.max_total_requests,
+    }
+
+
 # --------------------------------------------------------------------------- resume
 def resume(run_dir: Path, enable_network: bool, max_total_requests: int | None = None) -> int:
     run_dir = Path(run_dir)
