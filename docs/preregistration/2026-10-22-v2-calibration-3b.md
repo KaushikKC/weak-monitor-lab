@@ -1,7 +1,8 @@
-# Pre-registration 1c (DRAFT): environment v2 calibration, round 3, 3B agent (exploratory)
+# Pre-registration 1c: environment v2 calibration, round 3, 3B agent (exploratory)
 
-**Status:** draft, written 2026-10-22, before any 3B v2 episode exists. It is frozen by the commit that removes
-"(DRAFT)", after review. The run starts only after that commit. Roadmap: Part B, B1 follow-up.
+**Status:** frozen 2026-10-22, **before any 3B v2 episode exists** (draft committed in 3447de2, approved on
+review without changes; this commit only removes "(DRAFT)" and records the freeze). The run starts after this
+commit, and nothing below changes. Roadmap: Part B, B1 follow-up.
 
 ## Why there is a round 3
 
