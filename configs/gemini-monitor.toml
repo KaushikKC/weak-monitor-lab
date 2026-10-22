@@ -1,8 +1,7 @@
 # Gemini as MONITOR on saved trajectories (roadmap A3, 2026-10-21). Use with --prompt-variant v3 | v5 and
 # --monitors llm (rule-v2 already exists for these trajectories). The model ID and limits are fixed in the
-# pre-registration before any call. Model gemini-3.1-flash-lite, free tier, chosen 2026-10-22. The limits
-# below are still the gemini-2.5-flash values seen on 2026-09-28 (5 RPM, 250K TPM, 20 RPD) until the
-# gemini-3.1-flash-lite free-tier limits are read from Google AI Studio; they are account-specific.
+# pre-registration before any call. Model gemini-3.1-flash-lite, free tier, chosen 2026-10-22. Its limits
+# in Google AI Studio on 2026-10-22: 15 RPM, 250K TPM, 500 RPD. They are account-specific; re-check them.
 #
 # Plan first:  wml monitor --config configs/gemini-monitor.toml --prompt-variant v5 --monitors llm \
 #                --conditions B,C --trajectories runs/hvf-d1-actor --run-dir runs/<run> --dry-run
@@ -31,8 +30,8 @@ request_timeout_s = 120
 
 [limits]
 max_total_requests = 1000
-requests_per_minute = 4      # below the 5 RPM limit
-max_requests_per_day = 18    # below the 20 RPD limit, leaving room for retries
+requests_per_minute = 12     # below the 15 RPM limit
+max_requests_per_day = 450   # below the 500 RPD limit, leaving room for retries and other use
 quota_day_timezone = "America/Los_Angeles"
 daily_cap_providers = ["gemini"]
 max_retries = 2
