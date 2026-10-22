@@ -76,12 +76,14 @@ def test_gemini_monitor_runs_at_temperature_zero_and_records_returned_model_id(s
     assert _run(s) == 0
     res = list(read_jsonl(s.tmp / "m" / "monitor_results.jsonl"))
     assert len(res) == 20 and all(r["status"] == "ok" for r in res)
-    assert all(r["monitor"]["name"] == "gemini:gemini-2.5-flash|v5" for r in res)
+    assert all(r["monitor"]["name"] == "gemini:gemini-3.1-flash-lite|v5" for r in res)
     assert all(r["response_model_ids"] == ["gemini-fake-2.5-flash-001"] for r in res)
     calls = list(read_jsonl(s.tmp / "m" / "calls.jsonl"))
     assert {c["response_model_id"] for c in calls} == {"gemini-fake-2.5-flash-001"}
     assert all(c.temperature == 0.0 for c in s.models.configs)
     assert all(c.response_mime_type == "application/json" for c in s.models.configs)
+    assert all(c.thinking_config.thinking_level == "MINIMAL" and c.thinking_config.thinking_budget is None
+               for c in s.models.configs)
 
 
 def test_daily_cap_stops_cleanly_and_resume_next_day_never_repeats_calls(setup):
@@ -149,3 +151,20 @@ def test_dry_run_counts_calls_and_days_without_any_call(setup, monkeypatch):
     _run(s, conds=("B",))
     plan = pipeline.plan_monitor_calls(s.tmp / "m", [s.tmp / "fx"], s.cfg, ["B", "C"], ["llm"])
     assert (plan["results_done"], plan["calls_min"], plan["requests_used_so_far"]) == (10, 10, 10)
+
+
+def test_thinking_budget_is_still_sent_when_set(setup):
+    s = setup
+    s.cfg.monitor.gemini_thinking_level, s.cfg.monitor.gemini_thinking_budget = None, 0
+    assert _run(s, ("C",)) == 0
+    assert all(c.thinking_config.thinking_budget == 0 and c.thinking_config.thinking_level is None
+               for c in s.models.configs)
+
+
+def test_thinking_budget_and_level_are_exclusive():
+    from pydantic import ValidationError
+
+    from weak_monitor_lab.config import Config
+
+    with pytest.raises(ValidationError, match="not both"):
+        Config.model_validate({"monitor": {"gemini_thinking_budget": 0, "gemini_thinking_level": "minimal"}})
