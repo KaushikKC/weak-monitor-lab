@@ -1,8 +1,8 @@
 # Pre-registration 3 (DRAFT): Gemini as monitor on existing v1 trajectories
 
 **Status:** draft, written 2026-10-22, before any Gemini monitor call on these trajectories. Roadmap A6 item 3.
-The model was chosen on 2026-10-22: `gemini-3.1-flash-lite`, free tier. The remaining placeholders (`<…>`)
-are the free-tier limits, filled from Google AI Studio. The commit that removes "(DRAFT)" freezes the plan. No call is made before that commit.
+The model was chosen on 2026-10-22: `gemini-3.1-flash-lite`, free tier. Its free-tier limits were read from
+Google AI Studio on 2026-10-22. The commit that removes "(DRAFT)" freezes the plan. No call is made before that commit.
 
 ## Data (existing; nothing new is generated)
 
@@ -19,11 +19,13 @@ D1 and D3 are never pooled. Episode classes are exactly those of the v1 pre-regi
 |---|---|
 | model | `gemini-3.1-flash-lite` (stable), AI Studio free tier. The model version string returned with every call is recorded per result in `response_model_ids` |
 | config | `configs/gemini-monitor.toml`: temperature 0, max 1024 output tokens, thinking level "minimal" (the lowest; Gemini 3.x takes a thinking level, not a budget), JSON output, 1 repair, 1 sample |
-| limits | `<RPM>` requests/min and `<RPD>` requests/day from AI Studio; the config caps stay below them (now 4/min, 18/day) |
+| limits | AI Studio free tier on 2026-10-22: 15 requests/min, 250K tokens/min, 500 requests/day. Config caps: 12 requests/min and 450 requests/day per run |
 | prompts | v3 and v5 (`monitor/prompts.py`, unchanged) |
 | conditions | B and C (condition A is not run) |
 
-Runs, in this order. The account's daily quota is shared, so they run one after another, never in parallel:
+Runs, in this order. The account's daily quota is shared, but the config's daily cap counts each run
+directory separately. So the runs go one after another, never in parallel, and **only one run makes calls on
+any one quota day** (Pacific time):
 
 ```
 1. wml monitor --config configs/gemini-monitor.toml --enable-network --trajectories runs/hvf-d1-actor  --run-dir runs/gem-d1-v5 --conditions B,C --monitors llm --prompt-variant v5
@@ -32,8 +34,10 @@ Runs, in this order. The account's daily quota is shared, so they run one after 
 4. … --trajectories runs/hvf-d3-fixtures --run-dir runs/gem-d3-v3 … --prompt-variant v3
 ```
 
-`wml monitor --dry-run` estimate at 18 requests/day: D1 120–240 calls per prompt (7–14 days each), and D3
-100–200 calls per prompt (6–12 days each).
+`wml monitor --dry-run` estimate with the caps above: D1 120–240 calls per prompt and D3 100–200 calls per
+prompt. Each fits in one day under the 450/day cap, about 10 and 8 minutes at 12/min. So there are 4 quota
+days, one per run. The worst case per day, 240 calls, leaves room under the 500/day limit for any other use
+of the account.
 
 ## Primary outcome
 
@@ -78,8 +82,3 @@ No significance test. No claim that one monitor is better is made from this comp
 
 The trajectories are synthetic (simulated orders; no personal data). Under the free tier, Google's terms allow
 prompts to be used to improve its products. This is recorded here and is not a reason to exclude anything.
-
-## Placeholders to fill before freezing
-
-`<RPM>`, `<RPD>`, read from Google AI Studio for `gemini-3.1-flash-lite`. The config caps are set below
-them in the same commit, and the `--dry-run` estimate above is recomputed with the new caps.
