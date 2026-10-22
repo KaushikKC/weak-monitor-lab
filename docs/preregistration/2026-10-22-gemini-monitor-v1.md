@@ -1,8 +1,8 @@
 # Pre-registration 3 (DRAFT): Gemini as monitor on existing v1 trajectories
 
 **Status:** draft, written 2026-10-22, before any Gemini monitor call on these trajectories. Roadmap A6 item 3.
-The placeholders (`<…>`) are filled from the account's model list and AI Studio limits (open since A3), and
-the commit that removes "(DRAFT)" freezes the plan. No call is made before that commit.
+The model was chosen on 2026-10-22: `gemini-3.1-flash-lite`, free tier. The remaining placeholders (`<…>`)
+are the free-tier limits, filled from Google AI Studio. The commit that removes "(DRAFT)" freezes the plan. No call is made before that commit.
 
 ## Data (existing; nothing new is generated)
 
@@ -17,8 +17,8 @@ D1 and D3 are never pooled. Episode classes are exactly those of the v1 pre-regi
 
 | item | value |
 |---|---|
-| model | `<GEMINI_MODEL_ID>` (fixed at freezing; the model version string returned with every call is recorded per result in `response_model_ids`) |
-| config | `configs/gemini-monitor.toml`: temperature 0, max 1024 output tokens, thinking budget 0, JSON output, 1 repair, 1 sample |
+| model | `gemini-3.1-flash-lite` (stable), AI Studio free tier. The model version string returned with every call is recorded per result in `response_model_ids` |
+| config | `configs/gemini-monitor.toml`: temperature 0, max 1024 output tokens, thinking level "minimal" (the lowest; Gemini 3.x takes a thinking level, not a budget), JSON output, 1 repair, 1 sample |
 | limits | `<RPM>` requests/min and `<RPD>` requests/day from AI Studio; the config caps stay below them (now 4/min, 18/day) |
 | prompts | v3 and v5 (`monitor/prompts.py`, unchanged) |
 | conditions | B and C (condition A is not run) |
@@ -81,5 +81,5 @@ prompts to be used to improve its products. This is recorded here and is not a r
 
 ## Placeholders to fill before freezing
 
-`<GEMINI_MODEL_ID>`, `<RPM>`, `<RPD>`. If the limits are below the config caps, the caps are lowered in the
-same commit.
+`<RPM>`, `<RPD>`, read from Google AI Studio for `gemini-3.1-flash-lite`. The config caps are set below
+them in the same commit, and the `--dry-run` estimate above is recomputed with the new caps.
