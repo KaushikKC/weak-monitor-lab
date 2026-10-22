@@ -379,6 +379,7 @@ def summarize(run_dirs: list[Path], out_dir: Path, plots: bool = True) -> str:
     lines += _criteria_section(groups, emp, trajs, labels, gaps)
     lines += _combined_section(groups, emp, trajs, labels, gaps)
     episode_monitor_rows = _episode_monitor_rows(groups, emp, trajs, labels, gaps)
+    lines += coverage_section(runs)
 
     # ------------------------------------------------------------------ usage
     calls = [c for r in runs for c in r["calls"]]
@@ -707,6 +708,72 @@ def _combined_section(groups: dict, keys: list, trajs: dict, labels: dict, gaps:
                          f"{'n/a' if added is None else f'{added:+.2f}'} | {frac(only_llm, n_pos_pad)} | "
                          f"{'n/a' if c['auc'] is None else f'{c['auc']:.2f}'} | {met} |")
     return lines + [""]
+
+
+# A refusal: the provider blocked the prompt, or ended the output for a safety-type reason (Gemini).
+REFUSAL_FINISH_REASONS = ("SAFETY", "PROHIBITED_CONTENT", "BLOCKLIST", "SPII", "IMAGE_SAFETY")
+
+
+def is_refusal(result: dict) -> bool:
+    return result["status"] != "ok" and any(
+        f.get("block_reason") or str(f.get("finish_reason") or "").rsplit(".", 1)[-1] in REFUSAL_FINISH_REASONS
+        for f in result.get("failures") or [])
+
+
+def coverage_section(runs: list[dict]) -> list[str]:
+    """Per monitor run and monitor: how many judgements were eligible, judged, invalid, refused or never
+    attempted, and how many inputs max_input_chars truncated (added 2026-10-22). Eligible = trajectories in
+    the run's trajectory dirs x conditions x samples, every episode included whatever its status."""
+    from weak_monitor_lab.monitor.monitors import RULE_VERSION, monitor_name
+
+    rows = []
+    for r in runs:
+        params = r["manifest"].get("params", {})
+        if "trajectory_dirs" not in params:
+            continue
+        dirs = [Path(d) for d in params["trajectory_dirs"]]
+        n_traj = (sum(1 for d in dirs for _ in read_jsonl(d / "trajectories.jsonl"))
+                  if all((d / "trajectories.jsonl").exists() for d in dirs) else None)
+        conds = params.get("conditions", [])
+        mc = r["manifest"].get("config", {}).get("monitor", {})
+        wanted = []
+        if "rule" in params.get("monitors", []):
+            wanted.append((RULE_VERSION, 1))
+        if "llm" in params.get("monitors", []):
+            wanted.append((monitor_name(mc.get("provider"), mc.get("model_id"), mc.get("prompt_variant", "v1")),
+                           mc.get("samples", 1)))
+        names = {m["monitor"]["name"] for m in r["monitor_results"]}
+        wanted += [(n, 1) for n in sorted(names - {w for w, _ in wanted})]
+        state = r["status"].get("state", "unknown")
+        for name, samples in wanted:
+            ms = [m for m in r["monitor_results"] if m["monitor"]["name"] == name]
+            eligible = None if n_traj is None else n_traj * len(conds) * samples
+            refused = sum(is_refusal(m) for m in ms)
+            valid = sum(m["status"] == "ok" for m in ms)
+            missing = None if eligible is None else eligible - len(ms)
+            reason = "-"
+            if missing:
+                reason = f"run {state}" + (f": {r['status']['reason'][:120]}" if r["status"].get("reason") else "")
+            is_rule = name == RULE_VERSION
+            trunc = sum(m.get("input_truncation", "none") != "none" for m in ms)
+            rows.append((r["dir"].name, name, eligible, len(ms), valid, len(ms) - valid - refused, refused, missing,
+                         reason, "n/a" if is_rule else trunc))
+    if not rows:
+        return []
+    lines = ["## Monitor coverage and input truncation", "",
+             "Per monitor run. Eligible = trajectories x conditions x samples, every episode included whatever its "
+             "status. Judged = results written. Invalid = no valid output after repairs, not a refusal. Refused = "
+             "the provider blocked the prompt or stopped for a safety-type reason. Not attempted = eligible minus "
+             "judged. Truncated = inputs shortened to fit max_input_chars (rule-v2 reads the facts, not the text).",
+             "", "| run | monitor | eligible | judged | valid | invalid | refused | not attempted | reason | "
+             "truncated inputs |", "|---|---|" + "---:|" * 6 + "---|---:|"]
+    for run, name, el, judged, valid, inv, ref, miss, reason, trunc in sorted(rows):
+        lines.append(f"| {md_cell(run)} | {md_cell(name)} | {'n/a' if el is None else el} | {judged} | {valid} | "
+                     f"{inv} | {ref} | {'n/a' if miss is None else miss} | {md_cell(reason)} | {trunc} |")
+    llm = [x for x in rows if x[9] != "n/a"]
+    lines += ["", f"- LLM monitor inputs truncated by max_input_chars: {sum(x[9] for x in llm)}/"
+                  f"{sum(x[3] for x in llm)} judgements", ""]
+    return lines
 
 
 def _episode_monitor_rows(groups: dict, keys: list, trajs: dict, labels: dict, gaps: dict) -> list[dict]:
