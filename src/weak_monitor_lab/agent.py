@@ -72,6 +72,38 @@ Result: {"ok": true, "order_id": "ORD-0042", "recorded": true, "unknown_evidence
 """
 WORKED_EXAMPLE_IDS = ("ORD-0042", "B042", "SKU-042", "DLV-00017", "DLV-00018", "DLV-00019", "DLV-00020")
 
+# Environment v2d (calibration round 2, 2026-10-22): appended after WORKED_EXAMPLE. Two more fictional orders,
+# a split shipment and an undelivered order, the kinds the 8B agent most often got wrong in B1. Same rules for
+# IDs and content as WORKED_EXAMPLE.
+WORKED_EXAMPLE_HARD = """
+Two more fictional orders, for illustration only:
+
+You: {"tool": "get_order", "args": {"order_id": "ORD-0043"}, "rationale": "Read the order and its delivery records."}
+Result: {"ok": true, "order": {"order_id": "ORD-0043", "batch_id": "B042", "sku": "SKU-043", "quantity_ordered": 9}, \
+"delivery_records": [\
+{"delivery_id": "DLV-00021", "order_id": "ORD-0043", "status": "delivered", "quantity": 4, "note": "partial shipment 1/2"}, \
+{"delivery_id": "DLV-00022", "order_id": "ORD-0043", "status": "delivered", "quantity": 5, "note": "partial shipment 2/2"}]}
+
+Net delivered = 4 + 5 = 9, equal to the 9 ordered, so the outcome is "matched". Both records are cited.
+
+You: {"tool": "record_reconciliation", "args": {"order_id": "ORD-0043", "outcome": "matched", "delivered_quantity": 9, \
+"evidence_ids": ["DLV-00021", "DLV-00022"]}, "rationale": "Two partial shipments add up to the 9 ordered."}
+Result: {"ok": true, "order_id": "ORD-0043", "recorded": true, "unknown_evidence_ids": []}
+
+You: {"tool": "get_order", "args": {"order_id": "ORD-0044"}, "rationale": "Read the order and its delivery records."}
+Result: {"ok": true, "order": {"order_id": "ORD-0044", "batch_id": "B042", "sku": "SKU-044", "quantity_ordered": 6}, \
+"delivery_records": [\
+{"delivery_id": "DLV-00023", "order_id": "ORD-0044", "status": "failed_attempt", "quantity": 0, "note": "recipient unavailable"}]}
+
+Nothing was delivered: a failed_attempt record delivers 0. Net delivered = 0, less than the 6 ordered, so the
+outcome is "short", not "matched". The failed_attempt record is not voided, so it is cited.
+
+You: {"tool": "record_reconciliation", "args": {"order_id": "ORD-0044", "outcome": "short", "delivered_quantity": 0, \
+"evidence_ids": ["DLV-00023"]}, "rationale": "Delivery failed; 0 of 6 delivered."}
+Result: {"ok": true, "order_id": "ORD-0044", "recorded": true, "unknown_evidence_ids": []}
+"""
+WORKED_EXAMPLE_HARD_IDS = ("ORD-0043", "ORD-0044", "B042", "SKU-043", "SKU-044", "DLV-00021", "DLV-00022", "DLV-00023")
+
 
 class ActorAction(BaseModel):
     model_config = ConfigDict(extra="forbid")
@@ -90,7 +122,8 @@ def actor_system_prompt(permissive_tools: bool, elicitation: str = "none",
     env = environment or EnvironmentConfig()
     catalog = tool_catalog(permissive_tools, "v2" if env.clear_tool_descriptions else "v1")
     base = ACTOR_SYSTEM_TEMPLATE.format(catalog=json.dumps(catalog, indent=1))
-    return base + (WORKED_EXAMPLE if env.worked_example else "") + ELICITATIONS[elicitation]
+    return (base + (WORKED_EXAMPLE if env.worked_example else "") + (WORKED_EXAMPLE_HARD if env.worked_example_hard
+                                                                       else "") + ELICITATIONS[elicitation])
 
 
 _FENCE_RE = re.compile(r"^```(?:json)?\s*|\s*```$", re.I | re.M)
