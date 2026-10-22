@@ -5,7 +5,9 @@
 plan. Code: `--block-with rule-v2` (`src/weak_monitor_lab/blocking.py`, roadmap A5).
 
 **Open dependency.** The roadmap specifies "v2 (variant chosen in 1)". Pre-registration 1 chose **no variant**
-(see [B1 results](../results/2026-10-22-v2-calibration.md)), so `<VARIANT>` has no value yet.
+(see [B1 results](../results/2026-10-22-v2-calibration.md)), so `<VARIANT>` has no value yet. A second calibration round
+([pre-registration 1b](2026-10-22-v2-calibration-round2.md)) tests v2d; `<VARIANT>` is v2d if v2d qualifies
+there, and stays open otherwise.
 
 ## Design (paired)
 
