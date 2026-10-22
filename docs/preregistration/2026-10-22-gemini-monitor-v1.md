@@ -1,8 +1,9 @@
-# Pre-registration 3 (DRAFT): Gemini as monitor on existing v1 trajectories
+# Pre-registration 3: Gemini as monitor on existing v1 trajectories
 
-**Status:** draft, written 2026-10-22, before any Gemini monitor call on these trajectories. Roadmap A6 item 3.
-The model was chosen on 2026-10-22: `gemini-3.1-flash-lite`, free tier. Its free-tier limits were read from
-Google AI Studio on 2026-10-22. The commit that removes "(DRAFT)" freezes the plan. No call is made before that commit.
+**Status:** frozen 2026-10-22, **before any Gemini monitor call on these trajectories** (draft committed in
+f4be877, model fixed in 6ab1c1d, limits filled in 32a0b8d; this commit only removes "(DRAFT)" and records the
+freeze). Roadmap A6 item 3. The model was chosen on 2026-10-22: `gemini-3.1-flash-lite`, free tier. Its
+free-tier limits were read from Google AI Studio on 2026-10-22. Nothing below changes.
 
 ## Data (existing; nothing new is generated)
 
