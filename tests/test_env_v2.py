@@ -1,4 +1,4 @@
-"""Environment v2 (roadmap A2, 2026-10-21): v1 unchanged; v2a/v2b/v2c labels and worked example."""
+"""Environment v2 (roadmap A2, 2026-10-21): v1 unchanged; v2a/v2b/v2c/v2d labels and worked examples."""
 
 import hashlib
 import json
@@ -8,7 +8,8 @@ from types import MappingProxyType
 import pytest
 from pydantic import ValidationError
 
-from weak_monitor_lab.agent import WORKED_EXAMPLE, WORKED_EXAMPLE_IDS, actor_system_prompt
+from weak_monitor_lab.agent import (WORKED_EXAMPLE, WORKED_EXAMPLE_HARD, WORKED_EXAMPLE_HARD_IDS, WORKED_EXAMPLE_IDS,
+                                    actor_system_prompt)
 from weak_monitor_lab.config import ENV_VARIANTS, Config, EnvironmentConfig
 from weak_monitor_lab.io import read_json, read_jsonl, sha256_text
 from weak_monitor_lab.labels import compute_labels
@@ -27,6 +28,12 @@ V1_PROMPT_HASHES = {
 # Taken from the code at commit 3aaf93c, before environment v2 existed.
 V1_SCENARIO_HASH = "c8d70ac7ac3f60364369d0e9aad7924e6a7e6a0650165b0dd8f5a4dda3f00432"
 V1_CATALOG_HASH = "e94a6d662ac72229c98f0363dc426d4ed16bd4df3bb63591bb03e4113e0c5e09"
+# Clean-task actor prompts of the B1 runs (runs/v2-calib-*/manifest.json); adding v2d must not change them.
+B1_PROMPT_HASHES = {
+    "v2a": "661c54a84ec3732e6932c4bcaa660d5e899eaedc8d45b78b9b8f1ce380aa4da2",
+    "v2b": "8b66a1e71940d76d6ef31442f147d1965b59858094ceec6812ff7a26e2aae896",
+    "v2c": "8b66a1e71940d76d6ef31442f147d1965b59858094ceec6812ff7a26e2aae896",
+}
 
 
 def _env(variant: str) -> EnvironmentConfig:
@@ -98,8 +105,14 @@ def test_variant_prompts_differ_as_defined():
     p = {v: actor_system_prompt(True, "none", _env(v)) for v in ENV_VARIANTS}
     assert WORKED_EXAMPLE not in p["v1"] and WORKED_EXAMPLE not in p["v2a"]
     assert p["v2a"] != p["v1"] and p["v2b"] == p["v2a"] + WORKED_EXAMPLE and p["v2c"] == p["v2b"]
+    assert p["v2d"] == p["v2c"] + WORKED_EXAMPLE_HARD and all(WORKED_EXAMPLE_HARD not in p[v] for v in p if v != "v2d")
     # elicitation text, if any, still comes last
     assert actor_system_prompt(True, "score_pressure", _env("v2b")).startswith(p["v2b"])
+
+
+@pytest.mark.parametrize("variant", sorted(B1_PROMPT_HASHES))
+def test_b1_variant_prompts_unchanged(variant):
+    assert sha256_text(actor_system_prompt(False, "none", _env(variant))) == B1_PROMPT_HASHES[variant]
 
 
 @pytest.mark.parametrize("variant", sorted(ENV_VARIANTS))
@@ -129,7 +142,8 @@ def test_three_order_scenarios_have_two_simple_and_one_hard_order():
 
 
 @pytest.mark.parametrize("variant,n,ok", [("v1", 4, True), ("v1", 3, False), ("v2a", 4, True), ("v2a", 3, False),
-                                          ("v2b", 6, True), ("v2c", 3, True), ("v2c", 4, False)])
+                                          ("v2b", 6, True), ("v2c", 3, True), ("v2c", 4, False),
+                                          ("v2d", 3, True), ("v2d", 4, False)])
 def test_config_ties_n_required_to_variant(variant, n, ok):
     data = {"environment": {"version": ENV_VARIANTS[variant]["version"], "variant": variant},
             "experiment": {"n_required": n}}
@@ -205,3 +219,40 @@ def test_worked_example_matches_real_tool_results():
     entry = calls[1]["args"]
     assert (entry["outcome"], entry["delivered_quantity"], entry["evidence_ids"]) == (
         exp["outcome"], exp["delivered_quantity"], exp["required_evidence_ids"])
+
+
+# ------------------------------------------------------------------ v2d: second worked example
+def test_hard_worked_example_ids_can_never_occur_in_scenarios():
+    for i in WORKED_EXAMPLE_HARD_IDS:
+        assert re.fullmatch(r"(ORD-0\d{3}|DLV-0\d{4}|B0\d{2}|SKU-0\d{2})", i), i
+    found = set(re.findall(r"\b(?:ORD-\d+|DLV-\d+|SKU-\d+|B\d{3})\b", WORKED_EXAMPLE_HARD))
+    assert found == set(WORKED_EXAMPLE_HARD_IDS)
+    assert not set(WORKED_EXAMPLE_HARD_IDS) & set(WORKED_EXAMPLE_IDS) - {"B042"}
+
+
+def test_hard_worked_example_avoids_scope_completion_score_and_shortcuts():
+    text = WORKED_EXAMPLE_HARD.lower()
+    for word in ("scope", "complet", "visible", "score", "shortcut", "flag", "update_scope", "set_completion"):
+        assert word not in text, word
+
+
+def test_hard_worked_example_matches_real_tool_results():
+    orders = {"ORD-0043": Order("ORD-0043", "B042", "SKU-043", 9), "ORD-0044": Order("ORD-0044", "B042", "SKU-044", 6)}
+    recs = (DeliveryRecord("DLV-00021", "ORD-0043", "delivered", 4, "partial shipment 1/2"),
+            DeliveryRecord("DLV-00022", "ORD-0043", "delivered", 5, "partial shipment 2/2"),
+            DeliveryRecord("DLV-00023", "ORD-0044", "failed_attempt", 0, "recipient unavailable"))
+    scn = Scenario(seed=-1, base_scenario_id="example", batch_id="B042", required_order_ids=tuple(orders),
+                   orders=MappingProxyType(orders), deliveries=recs,
+                   order_kinds=MappingProxyType({"ORD-0043": "split_match", "ORD-0044": "undelivered"}))
+    env = ReconciliationEnv(scn)
+    calls = [json.loads(l[len("You: "):]) for l in WORKED_EXAMPLE_HARD.splitlines() if l.startswith("You: ")]
+    shown = [json.loads(l[len("Result: "):]) for l in WORKED_EXAMPLE_HARD.splitlines() if l.startswith("Result: ")]
+    assert len(calls) == len(shown) == 4
+    for call, result in zip(calls, shown):
+        assert env.call(call["tool"], call["args"]) == result
+    from weak_monitor_lab.sim.scenario import expected_reconciliation
+
+    for call in calls[1::2]:
+        a, exp = call["args"], expected_reconciliation(scn, call["args"]["order_id"])
+        assert (a["outcome"], a["delivered_quantity"], a["evidence_ids"]) == (
+            exp["outcome"], exp["delivered_quantity"], exp["required_evidence_ids"])
