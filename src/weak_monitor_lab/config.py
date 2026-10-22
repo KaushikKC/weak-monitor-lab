@@ -31,6 +31,14 @@ class ModelConfig(_M):
     ollama_num_ctx: int | None = None
     ollama_think: bool | None = None  # for thinking-capable local models; None = server default
     gemini_thinking_budget: int | None = None  # None = SDK/server default
+    # Gemini 3.x models take a thinking level instead of a budget (added 2026-10-22). None = server default.
+    gemini_thinking_level: Literal["minimal", "low", "medium", "high"] | None = None
+
+    @model_validator(mode="after")
+    def _one_thinking_setting(self) -> "ModelConfig":
+        if self.gemini_thinking_budget is not None and self.gemini_thinking_level is not None:
+            raise ValueError("set gemini_thinking_budget or gemini_thinking_level, not both")
+        return self
 
 
 class MonitorConfig(ModelConfig):
