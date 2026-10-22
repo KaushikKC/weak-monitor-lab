@@ -69,6 +69,8 @@ class GeminiAdapter:
             kw["response_mime_type"] = "application/json"
         if cfg.gemini_thinking_budget is not None:
             kw["thinking_config"] = types.ThinkingConfig(thinking_budget=cfg.gemini_thinking_budget)
+        elif cfg.gemini_thinking_level is not None:
+            kw["thinking_config"] = types.ThinkingConfig(thinking_level=cfg.gemini_thinking_level.upper())
         t0 = time.monotonic()
         try:
             resp = self._client.models.generate_content(
