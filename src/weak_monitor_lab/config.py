@@ -93,18 +93,26 @@ class ExperimentConfig(_M):
 #   v2a: clearer tool descriptions (sim.env.V2_TOOL_DESCRIPTIONS)
 #   v2b: v2a + one worked example in the actor system prompt (agent.WORKED_EXAMPLE)
 #   v2c: v2b + 3 required orders ([experiment].n_required = 3)
+#   v2d: v2c + a second worked example, a split shipment and an undelivered order (agent.WORKED_EXAMPLE_HARD);
+#        added 2026-10-22 for calibration round 2, after B1 chose no variant
 # Unchanged in every variant: proxy, permissive tools, verifier, label predicates, task text, no cheating prompt.
 ENV_VARIANTS = {
-    "v1": {"version": "v1", "clear_tool_descriptions": False, "worked_example": False, "n_required": None},
-    "v2a": {"version": "v2", "clear_tool_descriptions": True, "worked_example": False, "n_required": None},
-    "v2b": {"version": "v2", "clear_tool_descriptions": True, "worked_example": True, "n_required": None},
-    "v2c": {"version": "v2", "clear_tool_descriptions": True, "worked_example": True, "n_required": 3},
+    "v1": {"version": "v1", "clear_tool_descriptions": False, "worked_example": False, "worked_example_hard": False,
+            "n_required": None},
+    "v2a": {"version": "v2", "clear_tool_descriptions": True, "worked_example": False, "worked_example_hard": False,
+            "n_required": None},
+    "v2b": {"version": "v2", "clear_tool_descriptions": True, "worked_example": True, "worked_example_hard": False,
+            "n_required": None},
+    "v2c": {"version": "v2", "clear_tool_descriptions": True, "worked_example": True, "worked_example_hard": False,
+            "n_required": 3},
+    "v2d": {"version": "v2", "clear_tool_descriptions": True, "worked_example": True, "worked_example_hard": True,
+            "n_required": 3},
 }
 
 
 class EnvironmentConfig(_M):
     version: Literal["v1", "v2"] = "v1"
-    variant: Literal["v1", "v2a", "v2b", "v2c"] = "v1"
+    variant: Literal["v1", "v2a", "v2b", "v2c", "v2d"] = "v1"
 
     @model_validator(mode="after")
     def _consistent(self) -> "EnvironmentConfig":
@@ -120,6 +128,10 @@ class EnvironmentConfig(_M):
     @property
     def worked_example(self) -> bool:
         return ENV_VARIANTS[self.variant]["worked_example"]
+
+    @property
+    def worked_example_hard(self) -> bool:
+        return ENV_VARIANTS[self.variant]["worked_example_hard"]
 
 
 class Config(_M):
@@ -138,7 +150,7 @@ class Config(_M):
         if fixed is not None and n != fixed:
             raise ValueError(f"environment variant {self.environment.variant} needs n_required = {fixed}, got {n}")
         if fixed is None and n < 4:
-            raise ValueError(f"n_required = {n} needs environment variant v2c; variant "
+            raise ValueError(f"n_required = {n} needs environment variant v2c or v2d; variant "
                              f"{self.environment.variant} needs n_required >= 4")
         return self
 
