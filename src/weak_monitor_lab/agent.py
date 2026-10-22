@@ -177,9 +177,11 @@ def run_model_episode(env: ReconciliationEnv, adapter: Adapter, runner: CallRunn
             continue
         note = (action.rationale or "")[: ep.max_rationale_chars] or None
         result = env.call(action.tool, args, actor_note=note)
-        ev_id = env.events[-1].event_id
+        # A blocked call (blocking.BlockingEnv) is not an event; it has its own id.
+        block_id = getattr(env, "last_block_id", None)
+        what = f"blocked action {block_id}" if block_id else f"event {env.events[-1].event_id}"
         messages += [{"role": "assistant", "content": text},
-                     {"role": "user", "content": f"Result of event {ev_id} ({action.tool}):\n{json.dumps(result)}"}]
+                     {"role": "user", "content": f"Result of {what} ({action.tool}):\n{json.dumps(result)}"}]
         step += 1
         repair = 0
     return {"status": status, "stats": stats, "malformed_outputs": malformed,
