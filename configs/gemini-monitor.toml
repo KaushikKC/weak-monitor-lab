@@ -1,7 +1,8 @@
 # Gemini as MONITOR on saved trajectories (roadmap A3, 2026-10-21). Use with --prompt-variant v3 | v5 and
 # --monitors llm (rule-v2 already exists for these trajectories). The model ID and limits are fixed in the
-# pre-registration before any call; gemini-2.5-flash and the limits below are the values seen on 2026-09-28
-# (5 RPM, 250K TPM, 20 RPD). Re-check them in Google AI Studio; they are account-specific.
+# pre-registration before any call. Model gemini-3.1-flash-lite, free tier, chosen 2026-10-22. The limits
+# below are still the gemini-2.5-flash values seen on 2026-09-28 (5 RPM, 250K TPM, 20 RPD) until the
+# gemini-3.1-flash-lite free-tier limits are read from Google AI Studio; they are account-specific.
 #
 # Plan first:  wml monitor --config configs/gemini-monitor.toml --prompt-variant v5 --monitors llm \
 #                --conditions B,C --trajectories runs/hvf-d1-actor --run-dir runs/<run> --dry-run
@@ -14,14 +15,15 @@ provider = "mock"            # unused by `wml monitor`
 
 [monitor]
 provider = "gemini"
-model_id = "gemini-2.5-flash"
+model_id = "gemini-3.1-flash-lite"
 temperature = 0.0
 max_output_tokens = 1024
 seed = 0
 samples = 1
 max_input_chars = 24000
 max_repairs = 1
-gemini_thinking_budget = 0   # thinking tokens would otherwise eat the output limit and truncate JSON
+gemini_thinking_level = "minimal"  # lowest level; Gemini 3.x takes a level, not a budget. Thinking tokens
+                                   # would otherwise eat the output limit and truncate JSON
 
 [network]
 enabled = false              # still requires --enable-network
