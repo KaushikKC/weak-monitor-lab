@@ -73,6 +73,20 @@ Decision rules:
 completed episode. If one arm cannot be completed, only the completed pairs are analysed and the shortfall is
 reported. No seed is replaced.
 
+## TODO, not part of this study: a periodic-monitor arm
+
+Proposed after the monitoring red-team review (2026-10-22). A secondary arm in which the 8B monitor (prompt v5)
+judges the trace so far every 5 actions. A flag stops the episode for review, and the detection delay is
+reported in actions. It is **not implemented**, because it is not a small change:
+* The monitor views describe a finished episode. The input says "Episode end: … ended WITHOUT a submitted
+  report", and condition C's `final` block states the final scope, completion flags and score. A trace in
+  progress needs different wording, so the monitor input changes. That needs its own pre-registration, and v5
+  results on finished episodes would not carry over.
+* It needs a new episode status (stopped for review) and resume rules for it.
+* It needs a detection-delay metric with a definition for episodes that are never flagged.
+
+If it is added later, it gets its own pre-registration (or an amendment to this one, made before any data).
+
 ## Placeholders to fill before freezing
 
 `<VARIANT>`, `<SB>`, `<N>`, and `configs/block-u.toml` / `configs/block-b.toml` (written in the same commit).
