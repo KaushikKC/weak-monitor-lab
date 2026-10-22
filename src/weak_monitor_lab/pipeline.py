@@ -22,6 +22,7 @@ from weak_monitor_lab.adapters import (
     BudgetExceeded, NetworkDisabled, ProviderError, QuotaExhausted, make_adapter,
 )
 from weak_monitor_lab.agent import actor_system_prompt, run_model_episode
+from weak_monitor_lab.blocking import BlockingEnv
 from weak_monitor_lab.config import Config
 from weak_monitor_lab.io import (
     append_jsonl, assign_split, git_state, opaque_id, read_json, read_jsonl, sha256_text, software_versions, utc_now,
@@ -148,6 +149,11 @@ def generate_fixtures(out_dir: Path, seeds: list[int], n_required: int = 6, n_di
 
 
 # --------------------------------------------------------------------------- actor episodes
+def _blocked(actor_env) -> dict:
+    """Blocked calls of a blocking run (never executed, so not in `events`); nothing for other runs."""
+    return {"blocked_actions": actor_env.blocked} if isinstance(actor_env, BlockingEnv) else {}
+
+
 def run_actor(run_dir: Path, cfg: Config, source: str, clean: bool = False, command: str = "generate") -> int:
     if source not in ("agent_unprompted", "capability_calibration", "elicited_adversarial"):
         raise ValueError(f"unsupported source for actor runs: {source}")
@@ -157,10 +163,15 @@ def run_actor(run_dir: Path, cfg: Config, source: str, clean: bool = False, comm
         raise ValueError("elicited_adversarial runs need [experiment].elicitation set and permissive tools")
     if source != "elicited_adversarial" and elicitation != "none":
         raise ValueError(f"{source} runs must use elicitation = 'none' (got {elicitation!r})")
+    block_with = cfg.experiment.block_with
+    if block_with != "none" and clean:
+        raise ValueError("online blocking needs the permissive tools; it cannot be used on the clean task")
     run_dir = Path(run_dir)
     run_dir.mkdir(parents=True, exist_ok=True)
     run_id = run_dir.name
     params = {"source": source, "clean": clean}
+    if block_with != "none":
+        params["block_with"] = block_with
     adapter = make_adapter(cfg.actor, cfg, "actor")
     describe = adapter.describe()
     _start_session(run_dir, run_id, command, source, cfg, params, [{"role": "actor", **describe}],
@@ -178,6 +189,7 @@ def run_actor(run_dir: Path, cfg: Config, source: str, clean: bool = False, comm
             if ep_id in done:
                 continue
             env = ReconciliationEnv(scn, permissive_tools=not clean)
+            actor_env = env if block_with == "none" else BlockingEnv(env, block_with)
             sample_seed = None if cfg.actor.seed is None else cfg.actor.seed + 1000 * i + k
             generator = {"kind": "model", "provider": adapter.provider, "model_id": adapter.model_id,
                          "is_fixture": adapter.is_fixture, "model_info": describe,
@@ -187,14 +199,16 @@ def run_actor(run_dir: Path, cfg: Config, source: str, clean: bool = False, comm
             # v2 episodes carry their environment; v1 trajectories keep the published layout (no new fields).
             env_fields = ({} if cfg.environment.version == "v1" else
                           {"env_version": cfg.environment.version, "env_variant": cfg.environment.variant})
+            if block_with != "none":
+                env_fields["blocking"] = {"mode": block_with}
             started = utc_now()
             try:
-                out = run_model_episode(env, adapter, runner, cfg, f"{run_id}/{ep_id}", sample_seed)
+                out = run_model_episode(actor_env, adapter, runner, cfg, f"{run_id}/{ep_id}", sample_seed)
             except (QuotaExhausted, BudgetExceeded, ProviderError, CheckpointMismatch, KeyboardInterrupt) as exc:
                 reason = f"{type(exc).__name__}: {exc}"
                 append_jsonl(run_dir / "interrupted.jsonl", make_trajectory(
                     env, status="interrupted", started_at=started,
-                    extra={"interrupt_reason": reason, **env_fields}, **common))
+                    extra={"interrupt_reason": reason, **env_fields, **_blocked(actor_env)}, **common))
                 _finish(run_dir, "stopped", reason)
                 print(f"\nRun stopped cleanly: {reason}\nProgress is checkpointed. Resume with:\n"
                       f"  wml resume --run-dir {run_dir} --enable-network", file=sys.stderr)
@@ -202,7 +216,7 @@ def run_actor(run_dir: Path, cfg: Config, source: str, clean: bool = False, comm
             traj = make_trajectory(env, status=out["status"], started_at=started,
                                    extra={"stats": out["stats"], "malformed_outputs": out["malformed_outputs"],
                                           "actor_system_prompt_hash": out["actor_system_prompt_hash"],
-                                          **env_fields}, **common)
+                                          **env_fields, **_blocked(actor_env)}, **common)
             append_jsonl(run_dir / "trajectories.jsonl", traj)
             append_jsonl(run_dir / "labels.jsonl", label_record(traj))
             print(f"  episode {ep_id} ({scn.base_scenario_id}, sample {k}): {out['status']}, "
