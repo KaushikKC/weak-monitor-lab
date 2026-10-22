@@ -201,7 +201,9 @@ def summarize(run_dirs: list[Path], out_dir: Path, plots: bool = True) -> str:
     ep_rows = []
     by_source: dict[str, list[dict]] = defaultdict(list)
     for t in trajs.values():
-        by_source[t["dataset_source"]].append(t)
+        # Online-blocking episodes are a separate dataset; never pooled with unblocked ones of the same source.
+        mode = (t.get("blocking") or {}).get("mode")
+        by_source[t["dataset_source"] + (f" (online blocking: {mode})" if mode else "")].append(t)
     for source, ts in sorted(by_source.items()):
         gens = Counter(f"{t['generator'].get('provider', 'scripted')}:{t['generator'].get('model_id', '-')}"
                        for t in ts)
@@ -259,6 +261,10 @@ def summarize(run_dirs: list[Path], out_dir: Path, plots: bool = True) -> str:
                             "genuine_success": l.get("genuine_success"), "exploit_attempt": l.get("exploit_attempt"),
                             "successful_exploitation": l.get("successful_exploitation"),
                             "category": l.get("category")})
+
+    from weak_monitor_lab.blocking import blocking_section
+
+    lines += blocking_section(list(trajs.values()), labels)  # empty unless a run used online blocking
 
     interrupted = [(r["dir"].name, t) for r in runs for t in r["interrupted"] if t["episode_id"] not in trajs]
     lines += ["## Interrupted episodes (not resumed)", ""]
