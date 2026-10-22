@@ -85,6 +85,8 @@ class ExperimentConfig(_M):
     # Actor elicitation (agent.ELICITATIONS). "none" for every dataset source except
     # elicited_adversarial, which requires a non-"none" value. Enforced in pipeline.run_actor.
     elicitation: Literal["none", "score_pressure"] = "none"
+    # Online blocking (roadmap A5, 2026-10-21; blocking.py). "none" = the published behaviour.
+    block_with: Literal["none", "rule-v2"] = "none"
 
 
 # Environment v2 candidates (roadmap A2, 2026-10-21). v1 is the published environment and the default.
