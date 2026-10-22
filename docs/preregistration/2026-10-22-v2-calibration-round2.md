@@ -1,7 +1,8 @@
-# Pre-registration 1b (DRAFT): environment v2 calibration, round 2 (exploratory)
+# Pre-registration 1b: environment v2 calibration, round 2 (exploratory)
 
-**Status:** draft, written 2026-10-22, before any v2d episode exists. The commit that removes "(DRAFT)"
-freezes it, and the run starts only after that commit. Roadmap: Part B, B1 follow-up.
+**Status:** frozen 2026-10-22, **before any v2d episode exists** (draft committed in a323158, review items
+added in ec52a40; this commit only removes "(DRAFT)" and records the freeze). The run starts after this
+commit, and nothing below changes. Roadmap: Part B, B1 follow-up.
 
 ## Why there is a round 2
 
