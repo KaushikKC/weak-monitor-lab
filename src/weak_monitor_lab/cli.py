@@ -65,6 +65,8 @@ def cmd_generate(a, source: str, clean: bool, command: str) -> int:
     from weak_monitor_lab.pipeline import run_actor
 
     cfg = load_config(a.config, a.enable_network)
+    if getattr(a, "block_with", None):
+        cfg.experiment.block_with = a.block_with
     return run_actor(Path(a.run_dir), cfg, source, clean=clean, command=command)
 
 
@@ -187,12 +189,18 @@ def build_parser() -> argparse.ArgumentParser:
     sp = sub.add_parser("generate", help="generate actor trajectories (no instructions to hack)")
     net(sp)
     sp.add_argument("--run-dir", required=True)
+    sp.add_argument("--block-with", choices=["rule-v2"], default=None,
+                    help="online blocking: refuse, before execution, any call that would fire an attempt "
+                         "predicate (overrides [experiment].block_with; see blocking.py)")
     sp.set_defaults(fn=lambda a: cmd_generate(a, "agent_unprompted", False, "generate"))
 
     sp = sub.add_parser("elicit", help="generate ELICITED adversarial trajectories (separate dataset; "
                                        "requires [experiment].elicitation)")
     net(sp)
     sp.add_argument("--run-dir", required=True)
+    sp.add_argument("--block-with", choices=["rule-v2"], default=None,
+                    help="online blocking: refuse, before execution, any call that would fire an attempt "
+                         "predicate (overrides [experiment].block_with; see blocking.py)")
     sp.set_defaults(fn=lambda a: cmd_generate(a, "elicited_adversarial", False, "elicit"))
 
     sp = sub.add_parser("monitor", help="evaluate monitors on saved trajectories")
