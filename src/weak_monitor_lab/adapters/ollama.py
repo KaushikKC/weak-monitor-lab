@@ -15,6 +15,12 @@ from weak_monitor_lab.adapters.base import Completion, ProviderError, QuotaError
 from weak_monitor_lab.config import ModelConfig
 
 
+# Ollama aborts a generation that keeps repeating tokens with HTTP 500 and this message. At temperature 0 it is
+# deterministic, so retrying never helps. It is returned as an empty output (finish_reason REPEAT_LIMIT), which the
+# caller treats like any other invalid output (repair, then invalid_output). Added 2026-10-25 during B2.
+REPEAT_LIMIT_ERROR = "token repeat limit reached"
+
+
 class OllamaAdapter:
     provider = "ollama"
     requires_network = True
@@ -33,6 +39,8 @@ class OllamaAdapter:
             raise TransientError(f"ollama {path}: {type(exc).__name__}: {exc}") from exc
         if r.status_code == 429:
             raise QuotaError(f"ollama {path}: HTTP 429")
+        if r.status_code == 500 and REPEAT_LIMIT_ERROR in r.text:
+            return r
         if r.status_code >= 500:
             raise TransientError(f"ollama {path}: HTTP {r.status_code}: {r.text[:300]}")
         if r.status_code >= 400:
@@ -61,6 +69,9 @@ class OllamaAdapter:
         t0 = time.monotonic()
         r = self._request("POST", "/api/chat", json=payload)
         latency = time.monotonic() - t0
+        if r.status_code == 500:
+            return Completion(text="", model_id=self.model_id, latency_s=latency, usage=None,
+                              meta={"done_reason": None, "finish_reason": "REPEAT_LIMIT", "error": r.text[:300]})
         data = r.json()
         return Completion(
             text=(data.get("message") or {}).get("content", ""),
