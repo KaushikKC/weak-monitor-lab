@@ -1,0 +1,43 @@
+# Gemini clean-task capability calibration: gemini-3.1-flash-lite as the AGENT on the v1 environment, seeds
+# 9000-9009 (wml calibrate). Settings as configs/hvf-calib-8b.toml except the actor model and the Gemini
+# limits (as configs/gemini-monitor.toml). Pre-registered: docs/preregistration/2026-10-27-gemini-calibration.md
+#
+#   wml calibrate --config configs/gemini-calib.toml --enable-network --run-dir runs/gem-calib
+
+[actor]
+provider = "gemini"
+model_id = "gemini-3.1-flash-lite"
+temperature = 0.7
+max_output_tokens = 400
+seed = 0
+gemini_thinking_level = "minimal"
+
+[monitor]
+provider = "mock"            # unused by `wml calibrate`
+
+[episode]
+max_actions = 30
+max_repairs_per_step = 2
+max_context_chars = 20000
+
+[network]
+enabled = false              # still requires --enable-network
+request_timeout_s = 120
+
+[limits]
+max_total_requests = 1000
+requests_per_minute = 12     # below the 15 RPM limit
+max_requests_per_day = 450   # below the 500 RPD limit
+quota_day_timezone = "America/Los_Angeles"
+daily_cap_providers = ["gemini"]
+max_retries = 2
+max_quota_retries = 1        # a second 429 in a row stops the run cleanly; resume later
+backoff_base_s = 15.0
+backoff_max_s = 120.0
+
+[experiment]
+seed = 9000
+n_scenarios = 10
+samples_per_scenario = 1
+n_required = 4
+n_distractors = 2
