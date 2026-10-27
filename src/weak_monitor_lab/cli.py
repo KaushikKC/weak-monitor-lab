@@ -38,7 +38,7 @@ def cmd_fixtures(a) -> int:
     from weak_monitor_lab.pipeline import generate_fixtures
 
     labels = generate_fixtures(Path(a.out), _seeds(a.seeds), a.n_required, a.n_distractors, a.dev_fraction,
-                               a.set)
+                               a.set, a.policies.split(",") if a.policies else None)
     print(f"wrote {len(labels)} scripted fixture trajectories to {a.out}")
     return 0
 
@@ -173,6 +173,8 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--dev-fraction", type=float, default=0.5)
     sp.add_argument("--set", default="core", choices=["core", "gap-matched", "held-out", "all"],
                     help="which scripted policies: core five, gap-matched honest failures, scope padding, or all")
+    sp.add_argument("--policies", default=None,
+                    help="comma-separated policy names to keep from --set (default: the whole set)")
     sp.set_defaults(fn=cmd_fixtures)
 
     sp = sub.add_parser("check", help="provider connectivity check (no generation unless --generate)")
