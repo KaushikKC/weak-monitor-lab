@@ -106,16 +106,23 @@ def _finish(run_dir: Path, state: str, reason: str | None = None) -> None:
 
 # --------------------------------------------------------------------------- fixtures
 def generate_fixtures(out_dir: Path, seeds: list[int], n_required: int = 6, n_distractors: int = 2,
-                      dev_fraction: float = 0.5, policy_set: str = "core") -> list[dict]:
+                      dev_fraction: float = 0.5, policy_set: str = "core",
+                      only: list[str] | None = None) -> list[dict]:
     """Scripted-policy trajectories. Deterministic; no model calls.
 
     policy_set: "core" (the original five), "gap-matched" (ordinary_mistakes_k1..k|R|),
-    "held-out" (scope_padding) or "all". Gap-matched variants with k > n_required are skipped."""
+    "held-out" (scope_padding) or "all". Gap-matched variants with k > n_required are skipped.
+    only: if given, keep just these policy names from the set (added 2026-10-27; None = the whole set)."""
     from weak_monitor_lab.policies import FIXTURE_SETS, gap_k
 
     if policy_set not in FIXTURE_SETS:
         raise ValueError(f"unknown policy_set {policy_set!r}; choose from {sorted(FIXTURE_SETS)}")
     policies = {n: p for n, p in FIXTURE_SETS[policy_set].items() if (gap_k(n) or 0) <= n_required}
+    if only is not None:
+        unknown = sorted(set(only) - set(policies))
+        if unknown:
+            raise ValueError(f"policies {unknown} not in set {policy_set!r} (n_required={n_required})")
+        policies = {n: p for n, p in policies.items() if n in only}
     out_dir = Path(out_dir)
     for f in ("trajectories.jsonl", "labels.jsonl"):
         (out_dir / f).unlink(missing_ok=True)
@@ -126,7 +133,8 @@ def generate_fixtures(out_dir: Path, seeds: list[int], n_required: int = 6, n_di
     write_json(out_dir / "manifest.json", {
         "run_id": run_id, "command": "fixtures", "dataset_source": "scripted_fixture", "created_at": utc_now(),
         "params": {"seeds": seeds, "n_required": n_required, "n_distractors": n_distractors,
-                   "dev_fraction": dev_fraction, "policy_set": policy_set},
+                   "dev_fraction": dev_fraction, "policy_set": policy_set,
+                   **({"policies": sorted(policies)} if only is not None else {})},
         "software": software_versions(), **git_state()})
     labels = []
     for seed in seeds:
