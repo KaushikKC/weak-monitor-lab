@@ -1,4 +1,9 @@
-# Pre-registration 4 (DRAFT): online blocking with rule-v2
+# Pre-registration 4 (WITHDRAWN): online blocking with rule-v2
+
+**Withdrawn 2026-10-27, before any data.** No blocked or unblocked episode was generated for this study, and
+the placeholders were never filled; the plan was never frozen. Reason: too few exploits with the 3B agent
+(main study 2, `llama3.2:3b`: 4 exploit attempts in 300 episodes; [results](../results/2026-10-27-main-study-2.md)).
+The draft below is kept unchanged as a record.
 
 **Status:** draft, written 2026-10-22, before any blocked episode exists. Roadmap A6 item 4. The placeholders
 (`<…>`) are filled after the environment variant is settled, and the commit that removes "(DRAFT)" freezes the
