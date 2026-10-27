@@ -1,0 +1,1558 @@
+[
+ {
+  "command": "generate",
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 60,
+    "samples_per_scenario": 1,
+    "seed": 6000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 2500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v1",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "created_at": "2026-10-05T23:42:28.750+00:00",
+  "dataset": "D1",
+  "dataset_source": "agent_unprompted",
+  "params": {
+   "clean": false,
+   "source": "agent_unprompted"
+  },
+  "run_id": "hvf-d1-actor",
+  "sessions": [
+   {
+    "adapters": [
+     {
+      "base_url": "http://localhost:11434",
+      "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+      "family": "llama",
+      "format": "gguf",
+      "is_fixture": false,
+      "model_id": "llama3.1:8b-instruct-q4_K_M",
+      "parameter_size": "8.0B",
+      "provider": "ollama",
+      "quantization": "Q4_K_M",
+      "role": "actor",
+      "server_version": "0.35.1",
+      "size_bytes": 4920753328
+     }
+    ],
+    "network_enabled": true,
+    "prompt_hashes": {
+     "actor_elicitation": "none",
+     "actor_system": "63b9bf998bad7093f46a2582f48531e5e1afbd2dd39122220fa7412d38551455"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-05T23:42:28.751+00:00"
+   }
+  ]
+ },
+ {
+  "command": "fixtures",
+  "created_at": "2026-10-05T11:38:27.973+00:00",
+  "dataset": "D3",
+  "dataset_source": "scripted_fixture",
+  "params": {
+   "dev_fraction": 0.5,
+   "n_distractors": 2,
+   "n_required": 4,
+   "policy_set": "all",
+   "seeds": [
+    6200,
+    6201,
+    6202,
+    6203,
+    6204
+   ]
+  },
+  "run_id": "fixtures",
+  "software": {
+   "google-genai": "2.25.0",
+   "httpx": "0.28.1",
+   "machine": "arm64",
+   "matplotlib": "3.11.2",
+   "platform": "macOS-26.6-arm64-arm-64bit",
+   "pydantic": "2.13.5",
+   "python": "3.12.3",
+   "weak-monitor-lab": "0.1.0"
+  }
+ },
+ {
+  "command": "monitor",
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "gemini_thinking_level": null,
+    "max_output_tokens": 512,
+    "model_id": "mock",
+    "ollama_num_ctx": null,
+    "ollama_think": null,
+    "provider": "mock",
+    "seed": null,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "environment": {
+    "variant": "v1",
+    "version": "v1"
+   },
+   "episode": {
+    "max_actions": 40,
+    "max_context_chars": 24000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "block_with": "none",
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 6,
+    "n_scenarios": 5,
+    "samples_per_scenario": 1,
+    "seed": 1234
+   },
+   "limits": {
+    "backoff_base_s": 15.0,
+    "backoff_max_s": 120.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 450,
+    "max_retries": 2,
+    "max_total_requests": 1000,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 12.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "gemini_thinking_level": "minimal",
+    "max_input_chars": 24000,
+    "max_output_tokens": 1024,
+    "max_repairs": 1,
+    "model_id": "gemini-3.1-flash-lite",
+    "ollama_num_ctx": null,
+    "ollama_think": null,
+    "prompt_variant": "v5",
+    "provider": "gemini",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 120.0
+   }
+  },
+  "created_at": "2026-10-22T17:36:32.931+00:00",
+  "dataset": null,
+  "dataset_source": "agent_unprompted",
+  "git_commit": "43f8250fae925536c31904d4e144fcf0f22422f4",
+  "git_dirty": false,
+  "params": {
+   "conditions": [
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/hvf-d1-actor"
+   ]
+  },
+  "run_id": "gem-d1-v5",
+  "sessions": [
+   {
+    "adapters": [
+     {
+      "display_name": "Gemini 3.1 Flash Lite",
+      "input_token_limit": 1048576,
+      "is_fixture": false,
+      "model_id": "gemini-3.1-flash-lite",
+      "name": "models/gemini-3.1-flash-lite",
+      "output_token_limit": 65536,
+      "provider": "gemini",
+      "role": "monitor",
+      "version": "3.1-flash-lite-05-2026"
+     }
+    ],
+    "git_commit": "43f8250fae925536c31904d4e144fcf0f22422f4",
+    "git_dirty": false,
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v5",
+     "monitor_system": "337ce8b45744552d6e5a8f279d4aae177b8f45f54ba2fbe656cf6608e25e20a3"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-22T17:36:32.948+00:00"
+   },
+   {
+    "adapters": [
+     {
+      "display_name": "Gemini 3.1 Flash Lite",
+      "input_token_limit": 1048576,
+      "is_fixture": false,
+      "model_id": "gemini-3.1-flash-lite",
+      "name": "models/gemini-3.1-flash-lite",
+      "output_token_limit": 65536,
+      "provider": "gemini",
+      "role": "monitor",
+      "version": "3.1-flash-lite-05-2026"
+     }
+    ],
+    "git_commit": "43f8250fae925536c31904d4e144fcf0f22422f4",
+    "git_dirty": false,
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v5",
+     "monitor_system": "337ce8b45744552d6e5a8f279d4aae177b8f45f54ba2fbe656cf6608e25e20a3"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-22T17:58:39.279+00:00"
+   },
+   {
+    "adapters": [
+     {
+      "display_name": "Gemini 3.1 Flash Lite",
+      "input_token_limit": 1048576,
+      "is_fixture": false,
+      "model_id": "gemini-3.1-flash-lite",
+      "name": "models/gemini-3.1-flash-lite",
+      "output_token_limit": 65536,
+      "provider": "gemini",
+      "role": "monitor",
+      "version": "3.1-flash-lite-05-2026"
+     }
+    ],
+    "git_commit": "43f8250fae925536c31904d4e144fcf0f22422f4",
+    "git_dirty": false,
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v5",
+     "monitor_system": "337ce8b45744552d6e5a8f279d4aae177b8f45f54ba2fbe656cf6608e25e20a3"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-22T18:21:04.782+00:00"
+   },
+   {
+    "adapters": [
+     {
+      "display_name": "Gemini 3.1 Flash Lite",
+      "input_token_limit": 1048576,
+      "is_fixture": false,
+      "model_id": "gemini-3.1-flash-lite",
+      "name": "models/gemini-3.1-flash-lite",
+      "output_token_limit": 65536,
+      "provider": "gemini",
+      "role": "monitor",
+      "version": "3.1-flash-lite-05-2026"
+     }
+    ],
+    "git_commit": "98d0c8c35eacf73f84170ac7347ad8a212e434f6",
+    "git_dirty": false,
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v5",
+     "monitor_system": "337ce8b45744552d6e5a8f279d4aae177b8f45f54ba2fbe656cf6608e25e20a3"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-22T18:42:06.372+00:00"
+   },
+   {
+    "adapters": [
+     {
+      "display_name": "Gemini 3.1 Flash Lite",
+      "input_token_limit": 1048576,
+      "is_fixture": false,
+      "model_id": "gemini-3.1-flash-lite",
+      "name": "models/gemini-3.1-flash-lite",
+      "output_token_limit": 65536,
+      "provider": "gemini",
+      "role": "monitor",
+      "version": "3.1-flash-lite-05-2026"
+     }
+    ],
+    "git_commit": "98d0c8c35eacf73f84170ac7347ad8a212e434f6",
+    "git_dirty": false,
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v5",
+     "monitor_system": "337ce8b45744552d6e5a8f279d4aae177b8f45f54ba2fbe656cf6608e25e20a3"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-22T19:02:57.179+00:00"
+   },
+   {
+    "adapters": [
+     {
+      "display_name": "Gemini 3.1 Flash Lite",
+      "input_token_limit": 1048576,
+      "is_fixture": false,
+      "model_id": "gemini-3.1-flash-lite",
+      "name": "models/gemini-3.1-flash-lite",
+      "output_token_limit": 65536,
+      "provider": "gemini",
+      "role": "monitor",
+      "version": "3.1-flash-lite-05-2026"
+     }
+    ],
+    "git_commit": "98d0c8c35eacf73f84170ac7347ad8a212e434f6",
+    "git_dirty": false,
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v5",
+     "monitor_system": "337ce8b45744552d6e5a8f279d4aae177b8f45f54ba2fbe656cf6608e25e20a3"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-22T19:24:49.112+00:00"
+   },
+   {
+    "adapters": [
+     {
+      "display_name": "Gemini 3.1 Flash Lite",
+      "input_token_limit": 1048576,
+      "is_fixture": false,
+      "model_id": "gemini-3.1-flash-lite",
+      "name": "models/gemini-3.1-flash-lite",
+      "output_token_limit": 65536,
+      "provider": "gemini",
+      "role": "monitor",
+      "version": "3.1-flash-lite-05-2026"
+     }
+    ],
+    "git_commit": "98d0c8c35eacf73f84170ac7347ad8a212e434f6",
+    "git_dirty": false,
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v5",
+     "monitor_system": "337ce8b45744552d6e5a8f279d4aae177b8f45f54ba2fbe656cf6608e25e20a3"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-22T20:51:06.853+00:00"
+   },
+   {
+    "adapters": [
+     {
+      "display_name": "Gemini 3.1 Flash Lite",
+      "input_token_limit": 1048576,
+      "is_fixture": false,
+      "model_id": "gemini-3.1-flash-lite",
+      "name": "models/gemini-3.1-flash-lite",
+      "output_token_limit": 65536,
+      "provider": "gemini",
+      "role": "monitor",
+      "version": "3.1-flash-lite-05-2026"
+     }
+    ],
+    "git_commit": "008b13e9a00bc7dc3d5bf6e4fc90b48fe55192ed",
+    "git_dirty": false,
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v5",
+     "monitor_system": "337ce8b45744552d6e5a8f279d4aae177b8f45f54ba2fbe656cf6608e25e20a3"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-23T20:53:30.842+00:00"
+   }
+  ],
+  "status": {
+   "command": "monitor",
+   "params": {
+    "conditions": [
+     "B",
+     "C"
+    ],
+    "monitors": [
+     "llm"
+    ],
+    "trajectory_dirs": [
+     "runs/hvf-d1-actor"
+    ]
+   },
+   "reason": null,
+   "state": "completed",
+   "updated_at": "2026-10-23T21:09:04.600+00:00"
+  }
+ },
+ {
+  "command": "monitor",
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "gemini_thinking_level": null,
+    "max_output_tokens": 512,
+    "model_id": "mock",
+    "ollama_num_ctx": null,
+    "ollama_think": null,
+    "provider": "mock",
+    "seed": null,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "environment": {
+    "variant": "v1",
+    "version": "v1"
+   },
+   "episode": {
+    "max_actions": 40,
+    "max_context_chars": 24000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "block_with": "none",
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 6,
+    "n_scenarios": 5,
+    "samples_per_scenario": 1,
+    "seed": 1234
+   },
+   "limits": {
+    "backoff_base_s": 15.0,
+    "backoff_max_s": 120.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 450,
+    "max_retries": 2,
+    "max_total_requests": 1000,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 12.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "gemini_thinking_level": "minimal",
+    "max_input_chars": 24000,
+    "max_output_tokens": 1024,
+    "max_repairs": 1,
+    "model_id": "gemini-3.1-flash-lite",
+    "ollama_num_ctx": null,
+    "ollama_think": null,
+    "prompt_variant": "v3",
+    "provider": "gemini",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 120.0
+   }
+  },
+  "created_at": "2026-10-24T09:39:24.168+00:00",
+  "dataset": null,
+  "dataset_source": "agent_unprompted",
+  "git_commit": "255a95023bf4895ab707f2f1395f4b27538cbaca",
+  "git_dirty": false,
+  "params": {
+   "conditions": [
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/hvf-d1-actor"
+   ]
+  },
+  "run_id": "gem-d1-v3",
+  "sessions": [
+   {
+    "adapters": [
+     {
+      "display_name": "Gemini 3.1 Flash Lite",
+      "input_token_limit": 1048576,
+      "is_fixture": false,
+      "model_id": "gemini-3.1-flash-lite",
+      "name": "models/gemini-3.1-flash-lite",
+      "output_token_limit": 65536,
+      "provider": "gemini",
+      "role": "monitor",
+      "version": "3.1-flash-lite-05-2026"
+     }
+    ],
+    "git_commit": "255a95023bf4895ab707f2f1395f4b27538cbaca",
+    "git_dirty": false,
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v3",
+     "monitor_system": "b5893ef525a56bb24ec30c3496f379cc3d3b331337139d66ced246fd2a89b950"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-24T09:39:24.203+00:00"
+   },
+   {
+    "adapters": [
+     {
+      "display_name": "Gemini 3.1 Flash Lite",
+      "input_token_limit": 1048576,
+      "is_fixture": false,
+      "model_id": "gemini-3.1-flash-lite",
+      "name": "models/gemini-3.1-flash-lite",
+      "output_token_limit": 65536,
+      "provider": "gemini",
+      "role": "monitor",
+      "version": "3.1-flash-lite-05-2026"
+     }
+    ],
+    "git_commit": "255a95023bf4895ab707f2f1395f4b27538cbaca",
+    "git_dirty": false,
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v3",
+     "monitor_system": "b5893ef525a56bb24ec30c3496f379cc3d3b331337139d66ced246fd2a89b950"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-24T12:42:44.125+00:00"
+   }
+  ],
+  "status": {
+   "command": "monitor",
+   "params": {
+    "conditions": [
+     "B",
+     "C"
+    ],
+    "monitors": [
+     "llm"
+    ],
+    "trajectory_dirs": [
+     "runs/hvf-d1-actor"
+    ]
+   },
+   "reason": null,
+   "state": "completed",
+   "updated_at": "2026-10-24T12:52:14.407+00:00"
+  }
+ },
+ {
+  "command": "monitor",
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "gemini_thinking_level": null,
+    "max_output_tokens": 512,
+    "model_id": "mock",
+    "ollama_num_ctx": null,
+    "ollama_think": null,
+    "provider": "mock",
+    "seed": null,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "environment": {
+    "variant": "v1",
+    "version": "v1"
+   },
+   "episode": {
+    "max_actions": 40,
+    "max_context_chars": 24000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "block_with": "none",
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 6,
+    "n_scenarios": 5,
+    "samples_per_scenario": 1,
+    "seed": 1234
+   },
+   "limits": {
+    "backoff_base_s": 15.0,
+    "backoff_max_s": 120.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 450,
+    "max_retries": 2,
+    "max_total_requests": 1000,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 12.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "gemini_thinking_level": "minimal",
+    "max_input_chars": 24000,
+    "max_output_tokens": 1024,
+    "max_repairs": 1,
+    "model_id": "gemini-3.1-flash-lite",
+    "ollama_num_ctx": null,
+    "ollama_think": null,
+    "prompt_variant": "v5",
+    "provider": "gemini",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 120.0
+   }
+  },
+  "created_at": "2026-10-26T22:17:41.711+00:00",
+  "dataset": null,
+  "dataset_source": "scripted_fixture",
+  "git_commit": "fd51e921bf96b6bee1456c3bf692dcf1bf32d95b",
+  "git_dirty": false,
+  "params": {
+   "conditions": [
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/hvf-d3-fixtures"
+   ]
+  },
+  "run_id": "gem-d3-v5",
+  "sessions": [
+   {
+    "adapters": [
+     {
+      "display_name": "Gemini 3.1 Flash Lite",
+      "input_token_limit": 1048576,
+      "is_fixture": false,
+      "model_id": "gemini-3.1-flash-lite",
+      "name": "models/gemini-3.1-flash-lite",
+      "output_token_limit": 65536,
+      "provider": "gemini",
+      "role": "monitor",
+      "version": "3.1-flash-lite-05-2026"
+     }
+    ],
+    "git_commit": "fd51e921bf96b6bee1456c3bf692dcf1bf32d95b",
+    "git_dirty": false,
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v5",
+     "monitor_system": "337ce8b45744552d6e5a8f279d4aae177b8f45f54ba2fbe656cf6608e25e20a3"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-26T22:17:41.732+00:00"
+   }
+  ],
+  "status": {
+   "command": "monitor",
+   "params": {
+    "conditions": [
+     "B",
+     "C"
+    ],
+    "monitors": [
+     "llm"
+    ],
+    "trajectory_dirs": [
+     "runs/hvf-d3-fixtures"
+    ]
+   },
+   "reason": null,
+   "state": "completed",
+   "updated_at": "2026-10-26T22:41:39.594+00:00"
+  }
+ },
+ {
+  "command": "monitor",
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "gemini_thinking_level": null,
+    "max_output_tokens": 512,
+    "model_id": "mock",
+    "ollama_num_ctx": null,
+    "ollama_think": null,
+    "provider": "mock",
+    "seed": null,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "environment": {
+    "variant": "v1",
+    "version": "v1"
+   },
+   "episode": {
+    "max_actions": 40,
+    "max_context_chars": 24000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "block_with": "none",
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 6,
+    "n_scenarios": 5,
+    "samples_per_scenario": 1,
+    "seed": 1234
+   },
+   "limits": {
+    "backoff_base_s": 15.0,
+    "backoff_max_s": 120.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 450,
+    "max_retries": 2,
+    "max_total_requests": 1000,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 12.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "gemini_thinking_level": "minimal",
+    "max_input_chars": 24000,
+    "max_output_tokens": 1024,
+    "max_repairs": 1,
+    "model_id": "gemini-3.1-flash-lite",
+    "ollama_num_ctx": null,
+    "ollama_think": null,
+    "prompt_variant": "v3",
+    "provider": "gemini",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 120.0
+   }
+  },
+  "created_at": "2026-10-27T07:43:57.086+00:00",
+  "dataset": null,
+  "dataset_source": "scripted_fixture",
+  "git_commit": "fd51e921bf96b6bee1456c3bf692dcf1bf32d95b",
+  "git_dirty": false,
+  "params": {
+   "conditions": [
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/hvf-d3-fixtures"
+   ]
+  },
+  "run_id": "gem-d3-v3",
+  "sessions": [
+   {
+    "adapters": [
+     {
+      "display_name": "Gemini 3.1 Flash Lite",
+      "input_token_limit": 1048576,
+      "is_fixture": false,
+      "model_id": "gemini-3.1-flash-lite",
+      "name": "models/gemini-3.1-flash-lite",
+      "output_token_limit": 65536,
+      "provider": "gemini",
+      "role": "monitor",
+      "version": "3.1-flash-lite-05-2026"
+     }
+    ],
+    "git_commit": "fd51e921bf96b6bee1456c3bf692dcf1bf32d95b",
+    "git_dirty": false,
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v3",
+     "monitor_system": "b5893ef525a56bb24ec30c3496f379cc3d3b331337139d66ced246fd2a89b950"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-27T07:43:57.102+00:00"
+   },
+   {
+    "adapters": [
+     {
+      "display_name": "Gemini 3.1 Flash Lite",
+      "input_token_limit": 1048576,
+      "is_fixture": false,
+      "model_id": "gemini-3.1-flash-lite",
+      "name": "models/gemini-3.1-flash-lite",
+      "output_token_limit": 65536,
+      "provider": "gemini",
+      "role": "monitor",
+      "version": "3.1-flash-lite-05-2026"
+     }
+    ],
+    "git_commit": "85791d95bf39bb7e2f9a6bd0e29eed6c1d4ca18d",
+    "git_dirty": false,
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v3",
+     "monitor_system": "b5893ef525a56bb24ec30c3496f379cc3d3b331337139d66ced246fd2a89b950"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-27T08:20:34.786+00:00"
+   }
+  ],
+  "status": {
+   "command": "monitor",
+   "params": {
+    "conditions": [
+     "B",
+     "C"
+    ],
+    "monitors": [
+     "llm"
+    ],
+    "trajectory_dirs": [
+     "runs/hvf-d3-fixtures"
+    ]
+   },
+   "reason": null,
+   "state": "completed",
+   "updated_at": "2026-10-27T08:21:46.533+00:00"
+  }
+ },
+ {
+  "command": "monitor",
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 60,
+    "samples_per_scenario": 1,
+    "seed": 6000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 2500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v3",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "created_at": "2026-10-06T01:03:18.469+00:00",
+  "dataset": null,
+  "dataset_source": "agent_unprompted",
+  "params": {
+   "conditions": [
+    "A",
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "rule",
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/hvf-d1-actor"
+   ]
+  },
+  "run_id": "hvf-d1-mon-3b-v3",
+  "sessions": [
+   {
+    "adapters": [
+     {
+      "base_url": "http://localhost:11434",
+      "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+      "family": "llama",
+      "format": "gguf",
+      "is_fixture": false,
+      "model_id": "llama3.2:3b",
+      "parameter_size": "3.2B",
+      "provider": "ollama",
+      "quantization": "Q4_K_M",
+      "role": "monitor",
+      "server_version": "0.35.1",
+      "size_bytes": 2019393189
+     }
+    ],
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v3",
+     "monitor_system": "b5893ef525a56bb24ec30c3496f379cc3d3b331337139d66ced246fd2a89b950"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-06T01:03:18.469+00:00"
+   }
+  ],
+  "status": {
+   "command": "monitor",
+   "params": {
+    "conditions": [
+     "A",
+     "B",
+     "C"
+    ],
+    "monitors": [
+     "rule",
+     "llm"
+    ],
+    "trajectory_dirs": [
+     "runs/hvf-d1-actor"
+    ]
+   },
+   "reason": null,
+   "state": "completed",
+   "updated_at": "2026-10-06T01:35:33.581+00:00"
+  }
+ },
+ {
+  "command": "monitor",
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 60,
+    "samples_per_scenario": 1,
+    "seed": 6000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 2500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v5",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "created_at": "2026-10-06T04:14:09.658+00:00",
+  "dataset": null,
+  "dataset_source": "agent_unprompted",
+  "params": {
+   "conditions": [
+    "A",
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/hvf-d1-actor"
+   ]
+  },
+  "run_id": "hvf-d1-mon-8b-v5",
+  "sessions": [
+   {
+    "adapters": [
+     {
+      "base_url": "http://localhost:11434",
+      "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+      "family": "llama",
+      "format": "gguf",
+      "is_fixture": false,
+      "model_id": "llama3.1:8b-instruct-q4_K_M",
+      "parameter_size": "8.0B",
+      "provider": "ollama",
+      "quantization": "Q4_K_M",
+      "role": "monitor",
+      "server_version": "0.35.1",
+      "size_bytes": 4920753328
+     }
+    ],
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v5",
+     "monitor_system": "337ce8b45744552d6e5a8f279d4aae177b8f45f54ba2fbe656cf6608e25e20a3"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-06T04:14:09.658+00:00"
+   }
+  ],
+  "status": {
+   "command": "monitor",
+   "params": {
+    "conditions": [
+     "A",
+     "B",
+     "C"
+    ],
+    "monitors": [
+     "llm"
+    ],
+    "trajectory_dirs": [
+     "runs/hvf-d1-actor"
+    ]
+   },
+   "reason": null,
+   "state": "completed",
+   "updated_at": "2026-10-06T05:15:02.092+00:00"
+  }
+ },
+ {
+  "command": "monitor",
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 60,
+    "samples_per_scenario": 1,
+    "seed": 6000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 2500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v3",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "created_at": "2026-10-06T01:35:33.979+00:00",
+  "dataset": null,
+  "dataset_source": "scripted_fixture",
+  "params": {
+   "conditions": [
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "rule",
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/hvf-d3-fixtures"
+   ]
+  },
+  "run_id": "hvf-d3-mon-3b-v3",
+  "sessions": [
+   {
+    "adapters": [
+     {
+      "base_url": "http://localhost:11434",
+      "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+      "family": "llama",
+      "format": "gguf",
+      "is_fixture": false,
+      "model_id": "llama3.2:3b",
+      "parameter_size": "3.2B",
+      "provider": "ollama",
+      "quantization": "Q4_K_M",
+      "role": "monitor",
+      "server_version": "0.35.1",
+      "size_bytes": 2019393189
+     }
+    ],
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v3",
+     "monitor_system": "b5893ef525a56bb24ec30c3496f379cc3d3b331337139d66ced246fd2a89b950"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-06T01:35:33.979+00:00"
+   }
+  ],
+  "status": {
+   "command": "monitor",
+   "params": {
+    "conditions": [
+     "B",
+     "C"
+    ],
+    "monitors": [
+     "rule",
+     "llm"
+    ],
+    "trajectory_dirs": [
+     "runs/hvf-d3-fixtures"
+    ]
+   },
+   "reason": null,
+   "state": "completed",
+   "updated_at": "2026-10-06T01:51:46.225+00:00"
+  }
+ },
+ {
+  "command": "monitor",
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 60,
+    "samples_per_scenario": 1,
+    "seed": 6000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 2500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v5",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "created_at": "2026-10-06T05:15:02.597+00:00",
+  "dataset": null,
+  "dataset_source": "scripted_fixture",
+  "params": {
+   "conditions": [
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/hvf-d3-fixtures"
+   ]
+  },
+  "run_id": "hvf-d3-mon-8b-v5",
+  "sessions": [
+   {
+    "adapters": [
+     {
+      "base_url": "http://localhost:11434",
+      "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+      "family": "llama",
+      "format": "gguf",
+      "is_fixture": false,
+      "model_id": "llama3.1:8b-instruct-q4_K_M",
+      "parameter_size": "8.0B",
+      "provider": "ollama",
+      "quantization": "Q4_K_M",
+      "role": "monitor",
+      "server_version": "0.35.1",
+      "size_bytes": 4920753328
+     }
+    ],
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v5",
+     "monitor_system": "337ce8b45744552d6e5a8f279d4aae177b8f45f54ba2fbe656cf6608e25e20a3"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-06T05:15:02.597+00:00"
+   }
+  ],
+  "status": {
+   "command": "monitor",
+   "params": {
+    "conditions": [
+     "B",
+     "C"
+    ],
+    "monitors": [
+     "llm"
+    ],
+    "trajectory_dirs": [
+     "runs/hvf-d3-fixtures"
+    ]
+   },
+   "reason": null,
+   "state": "completed",
+   "updated_at": "2026-10-06T05:43:47.475+00:00"
+  }
+ }
+]
