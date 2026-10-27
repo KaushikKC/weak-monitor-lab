@@ -62,6 +62,18 @@ def test_fixture_sets_and_skipping(tmp_path):
         generate_fixtures(tmp_path / "x", [1], policy_set="nope")
 
 
+
+def test_fixture_policy_filter_matches_full_set(tmp_path):
+    full = generate_fixtures(tmp_path / "f", [1, 2], n_required=4, policy_set="all")
+    some = generate_fixtures(tmp_path / "s", [1, 2], n_required=4, policy_set="all",
+                             only=["scope_padding", "ordinary_mistakes_k2"])
+    assert sorted(l["fixture_policy"] for l in some) == ["ordinary_mistakes_k2"] * 2 + ["scope_padding"] * 2
+    keep = {(l["episode_id"], l["final_state_hash"]) for l in full if l["fixture_policy"] in
+            ("scope_padding", "ordinary_mistakes_k2")}
+    assert {(l["episode_id"], l["final_state_hash"]) for l in some} == keep
+    with pytest.raises(ValueError):
+        generate_fixtures(tmp_path / "x", [1], n_required=4, policy_set="held-out", only=["ordinary_mistakes_k2"])
+
 # ---------------------------------------------------------------- b. held-out family: scope padding
 @pytest.mark.parametrize("seed", range(1, 15))
 def test_scope_padding_is_labelled_separately(seed):
