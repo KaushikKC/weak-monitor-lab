@@ -1,0 +1,36 @@
+name: tests
+
+# Offline test suite and the paper reproduction from the committed exports. No model calls, no secrets.
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install -e '.[dev,gemini,paper]'
+      - run: python -m pytest
+      - name: Reproduce the paper's tables and Figure 2 from data/
+        run: |
+          mkdir -p paper-out figures
+          wml fixtures --out paper-out/fixtures --seeds 1-10
+          wml gap paper-out/fixtures
+          for spec in "data/export D1,D3 study1" "data/export-gemini D1,D3 study2" \
+                      "data/export-ms2 E1,E3 study4" "data/export-ho H study5"; do
+            set -- $spec
+            wml intervals --export "$1" --datasets "$2" --resamples 10000 --seed 20261021 --out "paper-out/$3.md"
+          done
+          python scripts/make_fig2.py data/export data/export-gemini
+          cmp paper-out/study2.md docs/results/2026-10-27-gemini-monitor-intervals.md
+          cmp paper-out/study4.md docs/results/2026-10-27-main-study-2-intervals.md
