@@ -1,5 +1,9 @@
 # Experimental protocol (short)
 
+> **Status (2026-10-30):** written on 2026-09-25 for the pilot phase and kept as the record. The confirmatory
+> studies follow their own pre-registrations ([study index](README.md)). One line below is out of date: the
+> `elicited_adversarial` source has since been implemented (`wml elicit`, used in the 2026-10-01 study).
+
 ## Question
 
 Given the same saved trajectory from a tool-using agent, how often does a **weak local LLM monitor**
