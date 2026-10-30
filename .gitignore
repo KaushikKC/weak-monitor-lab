@@ -17,3 +17,7 @@ runs/
 data/fixtures/
 
 .DS_Store
+
+# paper reproduction outputs (README "Reproduce the paper")
+paper-out/
+figures/
