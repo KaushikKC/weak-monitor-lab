@@ -1,0 +1,654 @@
+[
+ {
+  "command": "fixtures",
+  "created_at": "2026-10-27T22:57:00.865+00:00",
+  "dataset": "H",
+  "dataset_source": "scripted_fixture",
+  "git_commit": "06d91324e00f75ad6bd00eaf9896ed54fea49029",
+  "git_dirty": false,
+  "params": {
+   "dev_fraction": 0.5,
+   "n_distractors": 2,
+   "n_required": 4,
+   "policies": [
+    "ordinary_mistakes_k2",
+    "scope_padding"
+   ],
+   "policy_set": "all",
+   "seeds": [
+    9100,
+    9101,
+    9102,
+    9103,
+    9104,
+    9105,
+    9106,
+    9107,
+    9108,
+    9109,
+    9110,
+    9111,
+    9112,
+    9113,
+    9114,
+    9115,
+    9116,
+    9117,
+    9118,
+    9119,
+    9120,
+    9121,
+    9122,
+    9123,
+    9124
+   ]
+  },
+  "run_id": "fixtures",
+  "software": {
+   "google-genai": "2.25.0",
+   "httpx": "0.28.1",
+   "machine": "arm64",
+   "matplotlib": "3.11.2",
+   "platform": "macOS-26.6-arm64-arm-64bit",
+   "pydantic": "2.13.5",
+   "python": "3.12.3",
+   "weak-monitor-lab": "0.1.0"
+  }
+ },
+ {
+  "command": "monitor",
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "gemini_thinking_level": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "environment": {
+    "variant": "v1",
+    "version": "v1"
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "block_with": "none",
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 60,
+    "samples_per_scenario": 1,
+    "seed": 6000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 2500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "gemini_thinking_level": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v3",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "created_at": "2026-10-27T22:59:36.732+00:00",
+  "dataset": null,
+  "dataset_source": "scripted_fixture",
+  "git_commit": "06d91324e00f75ad6bd00eaf9896ed54fea49029",
+  "git_dirty": false,
+  "params": {
+   "conditions": [
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/ho-fixtures"
+   ]
+  },
+  "run_id": "ho-mon-8b-v3",
+  "sessions": [
+   {
+    "adapters": [
+     {
+      "base_url": "http://localhost:11434",
+      "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+      "family": "llama",
+      "format": "gguf",
+      "is_fixture": false,
+      "model_id": "llama3.1:8b-instruct-q4_K_M",
+      "parameter_size": "8.0B",
+      "provider": "ollama",
+      "quantization": "Q4_K_M",
+      "role": "monitor",
+      "server_version": "0.35.1",
+      "size_bytes": 4920753328
+     }
+    ],
+    "git_commit": "06d91324e00f75ad6bd00eaf9896ed54fea49029",
+    "git_dirty": false,
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v3",
+     "monitor_system": "b5893ef525a56bb24ec30c3496f379cc3d3b331337139d66ced246fd2a89b950"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-27T22:59:36.745+00:00"
+   }
+  ],
+  "status": {
+   "command": "monitor",
+   "params": {
+    "conditions": [
+     "B",
+     "C"
+    ],
+    "monitors": [
+     "llm"
+    ],
+    "trajectory_dirs": [
+     "runs/ho-fixtures"
+    ]
+   },
+   "reason": null,
+   "state": "completed",
+   "updated_at": "2026-10-27T23:35:49.809+00:00"
+  }
+ },
+ {
+  "command": "monitor",
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "gemini_thinking_level": null,
+    "max_output_tokens": 512,
+    "model_id": "mock",
+    "ollama_num_ctx": null,
+    "ollama_think": null,
+    "provider": "mock",
+    "seed": null,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "environment": {
+    "variant": "v1",
+    "version": "v1"
+   },
+   "episode": {
+    "max_actions": 40,
+    "max_context_chars": 24000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "block_with": "none",
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 6,
+    "n_scenarios": 5,
+    "samples_per_scenario": 1,
+    "seed": 1234
+   },
+   "limits": {
+    "backoff_base_s": 15.0,
+    "backoff_max_s": 120.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 450,
+    "max_retries": 2,
+    "max_total_requests": 1000,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 12.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "gemini_thinking_level": "minimal",
+    "max_input_chars": 24000,
+    "max_output_tokens": 1024,
+    "max_repairs": 1,
+    "model_id": "gemini-3.1-flash-lite",
+    "ollama_num_ctx": null,
+    "ollama_think": null,
+    "prompt_variant": "v5",
+    "provider": "gemini",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 120.0
+   }
+  },
+  "created_at": "2026-10-29T21:25:34.715+00:00",
+  "dataset": null,
+  "dataset_source": "scripted_fixture",
+  "git_commit": "bd58e65a4d341ed42131c936d05a5a4963f5e948",
+  "git_dirty": false,
+  "params": {
+   "conditions": [
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/ho-fixtures"
+   ]
+  },
+  "run_id": "ho-gem-v5",
+  "sessions": [
+   {
+    "adapters": [
+     {
+      "display_name": "Gemini 3.1 Flash Lite",
+      "input_token_limit": 1048576,
+      "is_fixture": false,
+      "model_id": "gemini-3.1-flash-lite",
+      "name": "models/gemini-3.1-flash-lite",
+      "output_token_limit": 65536,
+      "provider": "gemini",
+      "role": "monitor",
+      "version": "3.1-flash-lite-05-2026"
+     }
+    ],
+    "git_commit": "bd58e65a4d341ed42131c936d05a5a4963f5e948",
+    "git_dirty": false,
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v5",
+     "monitor_system": "337ce8b45744552d6e5a8f279d4aae177b8f45f54ba2fbe656cf6608e25e20a3"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-29T21:25:34.729+00:00"
+   }
+  ],
+  "status": {
+   "command": "monitor",
+   "params": {
+    "conditions": [
+     "B",
+     "C"
+    ],
+    "monitors": [
+     "llm"
+    ],
+    "trajectory_dirs": [
+     "runs/ho-fixtures"
+    ]
+   },
+   "reason": null,
+   "state": "completed",
+   "updated_at": "2026-10-29T21:36:35.254+00:00"
+  }
+ },
+ {
+  "command": "monitor",
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "gemini_thinking_level": null,
+    "max_output_tokens": 512,
+    "model_id": "mock",
+    "ollama_num_ctx": null,
+    "ollama_think": null,
+    "provider": "mock",
+    "seed": null,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "environment": {
+    "variant": "v1",
+    "version": "v1"
+   },
+   "episode": {
+    "max_actions": 40,
+    "max_context_chars": 24000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "block_with": "none",
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 6,
+    "n_scenarios": 5,
+    "samples_per_scenario": 1,
+    "seed": 1234
+   },
+   "limits": {
+    "backoff_base_s": 15.0,
+    "backoff_max_s": 120.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 450,
+    "max_retries": 2,
+    "max_total_requests": 1000,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 12.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "gemini_thinking_level": "minimal",
+    "max_input_chars": 24000,
+    "max_output_tokens": 1024,
+    "max_repairs": 1,
+    "model_id": "gemini-3.1-flash-lite",
+    "ollama_num_ctx": null,
+    "ollama_think": null,
+    "prompt_variant": "v3",
+    "provider": "gemini",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": true,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 120.0
+   }
+  },
+  "created_at": "2026-10-30T07:13:32.032+00:00",
+  "dataset": null,
+  "dataset_source": "scripted_fixture",
+  "git_commit": "afba17532330fffbb17643534d89b2804b89ba49",
+  "git_dirty": false,
+  "params": {
+   "conditions": [
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "llm"
+   ],
+   "trajectory_dirs": [
+    "runs/ho-fixtures"
+   ]
+  },
+  "run_id": "ho-gem-v3",
+  "sessions": [
+   {
+    "adapters": [
+     {
+      "display_name": "Gemini 3.1 Flash Lite",
+      "input_token_limit": 1048576,
+      "is_fixture": false,
+      "model_id": "gemini-3.1-flash-lite",
+      "name": "models/gemini-3.1-flash-lite",
+      "output_token_limit": 65536,
+      "provider": "gemini",
+      "role": "monitor",
+      "version": "3.1-flash-lite-05-2026"
+     }
+    ],
+    "git_commit": "afba17532330fffbb17643534d89b2804b89ba49",
+    "git_dirty": false,
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v3",
+     "monitor_system": "b5893ef525a56bb24ec30c3496f379cc3d3b331337139d66ced246fd2a89b950"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-30T07:13:32.049+00:00"
+   },
+   {
+    "adapters": [
+     {
+      "display_name": "Gemini 3.1 Flash Lite",
+      "input_token_limit": 1048576,
+      "is_fixture": false,
+      "model_id": "gemini-3.1-flash-lite",
+      "name": "models/gemini-3.1-flash-lite",
+      "output_token_limit": 65536,
+      "provider": "gemini",
+      "role": "monitor",
+      "version": "3.1-flash-lite-05-2026"
+     }
+    ],
+    "git_commit": "afba17532330fffbb17643534d89b2804b89ba49",
+    "git_dirty": false,
+    "network_enabled": true,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v3",
+     "monitor_system": "b5893ef525a56bb24ec30c3496f379cc3d3b331337139d66ced246fd2a89b950"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-30T08:07:12.297+00:00"
+   }
+  ],
+  "status": {
+   "command": "monitor",
+   "params": {
+    "conditions": [
+     "B",
+     "C"
+    ],
+    "monitors": [
+     "llm"
+    ],
+    "trajectory_dirs": [
+     "runs/ho-fixtures"
+    ]
+   },
+   "reason": null,
+   "state": "completed",
+   "updated_at": "2026-10-30T08:16:07.930+00:00"
+  }
+ },
+ {
+  "command": "monitor",
+  "config": {
+   "actor": {
+    "gemini_thinking_budget": null,
+    "gemini_thinking_level": null,
+    "max_output_tokens": 400,
+    "model_id": "llama3.1:8b-instruct-q4_K_M",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "provider": "ollama",
+    "seed": 0,
+    "temperature": 0.7,
+    "top_p": null
+   },
+   "environment": {
+    "variant": "v1",
+    "version": "v1"
+   },
+   "episode": {
+    "max_actions": 30,
+    "max_context_chars": 20000,
+    "max_rationale_chars": 300,
+    "max_repairs_per_step": 2
+   },
+   "experiment": {
+    "block_with": "none",
+    "dev_fraction": 0.5,
+    "elicitation": "none",
+    "n_distractors": 2,
+    "n_required": 4,
+    "n_scenarios": 60,
+    "samples_per_scenario": 1,
+    "seed": 6000
+   },
+   "limits": {
+    "backoff_base_s": 2.0,
+    "backoff_max_s": 60.0,
+    "daily_cap_providers": [
+     "gemini"
+    ],
+    "max_quota_retries": 1,
+    "max_requests_per_day": 0,
+    "max_retries": 2,
+    "max_total_requests": 2500,
+    "quota_day_timezone": "America/Los_Angeles",
+    "requests_per_minute": 120.0
+   },
+   "monitor": {
+    "gemini_thinking_budget": null,
+    "gemini_thinking_level": null,
+    "max_input_chars": 24000,
+    "max_output_tokens": 400,
+    "max_repairs": 1,
+    "model_id": "llama3.2:3b",
+    "ollama_num_ctx": 8192,
+    "ollama_think": null,
+    "prompt_variant": "v1",
+    "provider": "ollama",
+    "samples": 1,
+    "seed": 0,
+    "temperature": 0.0,
+    "top_p": null
+   },
+   "network": {
+    "concurrency": 1,
+    "enabled": false,
+    "ollama_base_url": "http://localhost:11434",
+    "request_timeout_s": 300.0
+   }
+  },
+  "created_at": "2026-10-29T21:27:00.804+00:00",
+  "dataset": null,
+  "dataset_source": "scripted_fixture",
+  "git_commit": "bd58e65a4d341ed42131c936d05a5a4963f5e948",
+  "git_dirty": false,
+  "params": {
+   "conditions": [
+    "B",
+    "C"
+   ],
+   "monitors": [
+    "rule"
+   ],
+   "trajectory_dirs": [
+    "runs/ho-fixtures"
+   ]
+  },
+  "run_id": "ho-rule-v2",
+  "sessions": [
+   {
+    "adapters": [],
+    "git_commit": "bd58e65a4d341ed42131c936d05a5a4963f5e948",
+    "git_dirty": false,
+    "network_enabled": false,
+    "prompt_hashes": {
+     "monitor_prompt_variant": "v1",
+     "monitor_system": "1e8062c1cf3572c169696ba1dbd74bc4ad82b2c70ae24319415a147fe7bd7e47"
+    },
+    "software": {
+     "google-genai": "2.25.0",
+     "httpx": "0.28.1",
+     "machine": "arm64",
+     "matplotlib": "3.11.2",
+     "platform": "macOS-26.6-arm64-arm-64bit",
+     "pydantic": "2.13.5",
+     "python": "3.12.3",
+     "weak-monitor-lab": "0.1.0"
+    },
+    "started_at": "2026-10-29T21:27:00.826+00:00"
+   }
+  ],
+  "status": {
+   "command": "monitor",
+   "params": {
+    "conditions": [
+     "B",
+     "C"
+    ],
+    "monitors": [
+     "rule"
+    ],
+    "trajectory_dirs": [
+     "runs/ho-fixtures"
+    ]
+   },
+   "reason": null,
+   "state": "completed",
+   "updated_at": "2026-10-29T21:27:00.886+00:00"
+  }
+ }
+]
