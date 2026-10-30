@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this code or data, please cite the paper below."
+title: "weak-monitor-lab: environment, labels, pre-registrations and per-judgement logs for 'Hacking or Just Failing?'"
+type: software
+authors:
+  - family-names: Kezendirane
+    given-names: Kaushik
+    affiliation: Independent researcher
+repository-code: "https://github.com/KaushikKC/weak-monitor-lab"
+license: MIT
+keywords:
+  - reward hacking
+  - LLM monitoring
+  - AI safety
+  - pre-registration
+preferred-citation:
+  type: article
+  title: "Hacking or Just Failing? A More Capable LLM Monitor Better Separates Reward Hacking from Honest Failure"
+  authors:
+    - family-names: Kezendirane
+      given-names: Kaushik
+      affiliation: Independent researcher
+  year: 2026
+  # Add once assigned: the arXiv identifier (e.g. "identifiers: - type: other, value: arXiv:XXXX.XXXXX")
+  # and a Zenodo DOI for the tagged release.
