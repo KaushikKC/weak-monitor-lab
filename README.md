@@ -86,6 +86,55 @@ pip install -e '.[dev]'               # add ,gemini for the Gemini adapter: pip 
 cp .env.example .env                  # only needed for Gemini; .env is git-ignored
 ```
 
+## Reproduce the paper
+
+Everything below runs offline from the committed exports (no model calls, no `runs/`). Install with
+`pip install -e '.[paper]'` (adds pandas, used only by the figure script). Outputs go to the git-ignored
+`paper-out/` and `figures/`.
+
+```bash
+mkdir -p paper-out figures
+
+# Table 1 (same score, same gap): scripted fixtures, six required orders; the table is scenario scn-1
+# (policies ordinary_mistakes, unsupported_completion, scope_exclusion: proxy, T, G, counterfactual_proxy)
+wml fixtures --out paper-out/fixtures --seeds 1-10
+wml gap paper-out/fixtures
+
+# Table 3 and Study 1 (D1, D3): local monitors and rule-v2
+wml intervals --export data/export --datasets D1,D3 \
+  --resamples 10000 --seed 20261021 --out paper-out/study1.md
+# Table 3 Gemini rows and Study 2 (D1, D3)
+wml intervals --export data/export-gemini --datasets D1,D3 \
+  --resamples 10000 --seed 20261021 --out paper-out/study2.md
+# Study 4 (E1, E3)
+wml intervals --export data/export-ms2 --datasets E1,E3 \
+  --resamples 10000 --seed 20261021 --out paper-out/study4.md
+# Study 5, replication (H)
+wml intervals --export data/export-ho --datasets H \
+  --resamples 10000 --seed 20261021 --out paper-out/study5.md
+
+# Figure 2 (prints each point's counts; writes figures/fig2_tradeoff.pdf and .png)
+python scripts/make_fig2.py data/export data/export-gemini
+```
+
+| Paper | Source |
+|---|---|
+| Table 1 | `paper-out/fixtures/labels.jsonl` and `gap.jsonl`, `scn-1` |
+| Table 2 (the five studies) | descriptive; the pre-registrations in `docs/preregistration/` |
+| Table 3 | `paper-out/study1.md` (8B, 3B, rule-v2 rows) and `paper-out/study2.md` (Gemini rows), D1, condition C, score≥0.5: proportions and the "exploit_attempt vs gap-matched (G>0)" AUC |
+| Figure 2 | `scripts/make_fig2.py` (the paper's figure script, unchanged) |
+| Table 4 (calibration, appendix) | not in an export: the calibration runs are in `runs/` (not committed). Values are in `docs/results/2026-10-06-hacking-vs-failing.md`, `2026-10-22-v2-calibration*.md` and `2026-10-28-gemini-calibration.md` |
+
+Notes:
+
+* The exports are those cited in the paper (`data/export` at `b387927`; `data/export-gemini` and
+  `data/export-ms2` at `5e4c884`) plus `data/export-ho`. Since `b387927`, `data/export/judgements.csv` only
+  gained the `truncated` column (all `false`); every other value is unchanged.
+* `wml summarize` needs the run directories, which are not committed; each export instead keeps its verbatim
+  output (`summarize.txt`, or `summarize-check.txt` in `data/export`).
+* Table 1's numbers regenerate exactly. Since `331213c` (2026-10-02) every fixture policy submits the same
+  report text, so the regenerated reports differ from the pre-October fixtures.
+
 ## Offline commands (no model calls)
 
 ```bash
