@@ -1,5 +1,8 @@
 # Limitations
 
+> **Status (2026-10-30):** recorded during the pilots (last substantive update 2026-10-02). The limitations of
+> the confirmatory studies are stated in the paper and in each results note ([study index](README.md)).
+
 ## Environment and labels
 
 * **Order counts differ by dataset.** Scripted fixtures (`wml fixtures`, `wml demo`) use 6 required orders.
