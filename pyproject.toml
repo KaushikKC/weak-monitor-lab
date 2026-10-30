@@ -7,7 +7,7 @@ name = "weak-monitor-lab"
 version = "0.1.0"
 description = "Small reproducible experiment: can a local LLM monitor detect reward hacking in a tool-using agent's trajectory?"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12"   # analysis.py uses PEP 701 f-strings; all runs used 3.12.3
 license = { text = "MIT" }
 dependencies = [
     "pydantic>=2.6,<3",
