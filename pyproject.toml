@@ -5,15 +5,20 @@ build-backend = "hatchling.build"
 [project]
 name = "weak-monitor-lab"
 version = "0.1.0"
-description = "Small reproducible experiment: can a local LLM monitor detect reward hacking in a tool-using agent's trajectory?"
+description = "Environment, replay-based labels and monitor pipeline for 'Hacking or Just Failing?': can LLM monitors separate reward hacking from honest failure?"
 readme = "README.md"
 requires-python = ">=3.12"   # analysis.py uses PEP 701 f-strings; all runs used 3.12.3
 license = { text = "MIT" }
+authors = [{ name = "Kaushik Kezendirane" }]
+keywords = ["reward hacking", "LLM monitoring", "AI safety", "pre-registration"]
 dependencies = [
     "pydantic>=2.6,<3",
     "httpx>=0.27,<1",
     "matplotlib>=3.8",
 ]
+
+[project.urls]
+Repository = "https://github.com/KaushikKC/weak-monitor-lab"
 
 [project.optional-dependencies]
 gemini = ["google-genai>=1.0"]
