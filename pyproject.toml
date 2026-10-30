@@ -18,6 +18,7 @@ dependencies = [
 [project.optional-dependencies]
 gemini = ["google-genai>=1.0"]
 dev = ["pytest>=8"]
+paper = ["pandas>=2"]                 # scripts/make_fig2.py only
 
 [project.scripts]
 wml = "weak_monitor_lab.cli:main"
